@@ -1,1 +1,1 @@
-/renders
+/renders/**/*.png  # Ignore PNGs in renders and subdirectories

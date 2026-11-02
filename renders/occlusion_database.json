@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "notes": {
+    "occlusion_percentage": "Percentage encoded in the image filename; verify whether it denotes covered or visible area before analysis.",
+    "key_parts_shown": "0 for filenames ending in _nokey; null for other images until manually annotated.",
+    "difficulty": "Optional measured or manually assigned difficulty; null until evaluated."
+  },
+  "images": [
+    {
+      "id": "book_marker_10",
+      "image_path": "renders/book_maker_10.png",
+      "object": "marker",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 10,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_marker_10_nokey",
+      "image_path": "renders/book_maker_10_nokey.png",
+      "object": "marker",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 10,
+      "key_parts_total": 1,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_marker_25_nokey",
+      "image_path": "renders/book_maker_25_nokey.png",
+      "object": "marker",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 25,
+      "key_parts_total": 1,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_pen_10",
+      "image_path": "renders/book_pen_10.png",
+      "object": "pen",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 10,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_pen_25",
+      "image_path": "renders/book_pen_25.png",
+      "object": "pen",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 25,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_pen_25_nokey",
+      "image_path": "renders/book_pen_25_nokey.png",
+      "object": "pen",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 25,
+      "key_parts_total": 1,
+      "key_parts_shown": 0,
+      "difficulty": null
+    }
+  ]
+}

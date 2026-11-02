@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Bypass -File .\compress_png.ps1
