@@ -1,1 +1,5 @@
 /renders/**/*.png  # Ignore PNGs in renders and subdirectories
+
+# Webpage: participant results
+webpage/results/
+__pycache__/

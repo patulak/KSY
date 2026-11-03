@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" data-theme="{{ theme }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ t.title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body class="view-{{ view }}">
+  {% if test_mode %}
+  <nav id="test-panel">
+    <strong>TEST</strong>
+    {% for code in languages %}<a href="{{ url_for('set_option', lang=code) }}" {% if code == lang %}class="on"{% endif %}>{{ code }}</a>{% endfor %}
+    <span>|</span>
+    {% for name in themes %}<a href="{{ url_for('set_option', theme=name) }}" {% if name == theme %}class="on"{% endif %}>{{ name }}</a>{% endfor %}
+    <span>|</span>
+    {% for name in views %}<a href="{{ url_for('set_option', view=name) }}" {% if name == view %}class="on"{% endif %}>{{ name }}</a>{% endfor %}
+    <span>|</span>
+    zoom {% for z in zoom_choices %}<a href="{{ url_for('set_option', zoom=z) }}" {% if z == zoom_choice %}class="on"{% endif %}>{{ z if z == 'random' else z ~ '×' }}</a>{% endfor %}
+    <span>|</span>
+    answers {% for m in answer_modes %}<a href="{{ url_for('set_option', answer_mode=m) }}" {% if m == answer_mode %}class="on"{% endif %}>{{ m }}</a>{% endfor %}
+    <span>|</span>
+    <form action="{{ url_for('set_option') }}">
+      <label>exposure <input type="number" name="exposure_ms" value="{{ exposure_ms }}" min="50" max="10000" step="50"> ms</label>
+      <label>next <input type="number" name="next_delay_s" value="{{ next_delay_s }}" min="0" max="30"> s</label>
+      <button>set</button>
+    </form>
+    <span>|</span>
+    <a href="{{ url_for('intro') }}">restart</a>
+    <span class="info">participant {{ session.participant }} · seed {{ session.seed }}</span>
+  </nav>
+  {% endif %}
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ t.done }}</h1>
+<p>{{ t.summary.format(correct=correct, total=total, seconds=seconds) }}</p>
+<p class="muted">{{ t.saved }}</p>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="progress">{{ t.progress.format(i=index + 1, n=total) }}
+  {% if test_mode %}<span id="countdown"></span> · {{ trial.image_id }} · {{ item(trial.correct) }} · zoom {{ zoom }}×{% endif %}</p>
+
+<div id="image-frame">
+  <img id="stimulus" src="{{ url_for('static', filename=trial.image) }}" alt="" style="--zoom: {{ zoom }}">
+</div>
+
+<form id="answer-form" method="post" hidden>
+  <input type="hidden" name="trial" value="{{ index }}">
+  <input type="hidden" name="answer" id="answer">
+  <input type="hidden" name="rt" id="rt">
+  <p class="question">{{ t.question }}</p>
+  <div id="answers" class="answers-{{ answer_mode }}">
+    {% for option in trial.options %}
+    {# Image mode falls back to the name for items without a training image. #}
+    {% if answer_mode == "image" and option in training_images %}
+    <button value="{{ option }}"><img src="{{ url_for('static', filename=training_images[option]) }}" alt="{{ item(option) }}"></button>
+    {% else %}
+    <button value="{{ option }}">{{ item(option) }}</button>
+    {% endif %}
+    {% endfor %}
+  </div>
+</form>
+
+<script src="{{ url_for('static', filename='trial.js') }}"
+        data-exposure-ms="{{ exposure_ms }}"
+        {% if test_mode %}data-test-mode data-next-delay-s="{{ next_delay_s }}" data-correct="{{ trial.correct }}"{% endif %}></script>
+{% endblock %}

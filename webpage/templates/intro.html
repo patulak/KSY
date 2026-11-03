@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{# Preload every image while the participant reads the instructions. #}
+{% block head %}
+  {% for tr in trials %}
+  <link rel="preload" as="image" href="{{ url_for('static', filename=tr.image) }}">
+  {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="language-choice">
+  {{ t.choose_language }}:
+  {% for code, name in languages.items() %}
+  <a href="{{ url_for('set_option', lang=code) }}" class="lang-button {% if code == lang %}on{% endif %}">{{ name }}</a>
+  {% endfor %}
+</div>
+
+<h1>{{ t.title }}</h1>
+
+<p>{{ t.thanks }}</p>
+
+<ul class="instructions">
+  <li>{{ t.instr_count.format(n=trials|length)|safe }}</li>
+  <li>{{ t.instr_exposure.format(s=exposure_s if lang == 'en' else exposure_s|replace('.', ','))|safe }}</li>
+  <li>{{ t.instr_choose|safe }}</li>
+  <li>{{ t.instr_speed|safe }}</li>
+  <li>{{ t.instr_anon }}</li>
+</ul>
+
+<a class="button primary" href="{{ url_for('training') }}">{{ t.continue }}</a>
+{% endblock %}

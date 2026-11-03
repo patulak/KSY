@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ t.training_title }}</h1>
+<p>{{ t.training_text }}</p>
+
+<div class="training-items">
+  {% for name, image in items.items() %}
+  <figure>
+    <img src="{{ url_for('static', filename=image) }}" alt="{{ item(name) }}">
+    <figcaption>{{ item(name) }}</figcaption>
+  </figure>
+  {% endfor %}
+</div>
+
+<form method="post" action="{{ url_for('start') }}">
+  <button class="primary">{{ t.start }}</button>
+</form>
+{% endblock %}
