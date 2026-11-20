@@ -7,8 +7,9 @@ Run locally:
 Experiment settings (test mode, exposure time, zoom, answer type) are the
 constants right below the imports.
 
-Flow: intro (language choice, random seed, instructions, images preload) -> training (objects
-unoccluded, with names) -> one page per trial -> end.
+Flow: intro (language choice, random seed, instructions, images preload) -> for every block
+(one category of 4 objects): training page with the 4 objects laid out like the answer
+buttons -> one page per trial -> ... -> end.
 Every answered trial is appended immediately to results/<participant>.csv
 (test mode: results/test_<participant>.csv), so partial data is kept even if
 the participant leaves early.
@@ -39,7 +40,7 @@ ITEMS_FILE = "dataset_items.md"  # answer item list, relative to the repository 
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 TRAINING_DIR = Path(__file__).resolve().parent / "static" / "images" / "training"
 CSV_COLUMNS = [
-    "participant", "seed", "language", "trial_order", "image_id", "occlusion_percentage", "key_parts_shown",
+    "participant", "seed", "language", "trial_order", "block", "image_id", "occlusion_percentage", "key_parts_shown",
     "options", "correct_answer", "chosen_answer", "is_correct", "reaction_time_ms", "exposure_ms", "zoom",
     "answer_mode", "colors", "timestamp",
 ]
@@ -123,22 +124,31 @@ def intro():
     return render_template("intro.html", trials=current_trials(), exposure_s=exposure_s)
 
 
-@app.get("/training")
-def training():
-    """Show every object that has a training render, unoccluded, with its name."""
-    if "seed" not in session:
-        return redirect(url_for("intro"))
-    return render_template("training.html", items=TRAINING_IMAGES)
-
-
 @app.post("/start")
 def start():
     if "seed" not in session:
         return redirect(url_for("intro"))
     session["index"] = 0
     session["correct"] = 0
+    session["trained_block"] = 0
     session["started_at"] = time.time()
     return redirect(url_for("trial"))
+
+
+@app.route("/training", methods=["GET", "POST"])
+def training():
+    """Before each block: its 4 objects, unoccluded, in the same layout as the answer buttons."""
+    if "index" not in session:
+        return redirect(url_for("intro"))
+    trials = current_trials()
+    if session["index"] >= len(trials):
+        return redirect(url_for("end"))
+    t = trials[session["index"]]
+    if request.method == "POST":
+        session["trained_block"] = t["block"]
+        return redirect(url_for("trial"))
+    return render_template("training.html", items=t["options"], block=t["block"], blocks=trials[-1]["block"],
+                           training_images=TRAINING_IMAGES)
 
 
 @app.route("/trial", methods=["GET", "POST"])
@@ -157,6 +167,7 @@ def trial():
             "seed": session["seed"],
             "language": session.get("lang", DEFAULT_LANGUAGE),
             "trial_order": session["index"] + 1,
+            "block": t["block"],
             "image_id": t["image_id"],
             "occlusion_percentage": t["occlusion_percentage"],
             "key_parts_shown": t["key_parts_shown"],
@@ -178,6 +189,8 @@ def trial():
     if session["index"] >= len(trials):
         return redirect(url_for("end"))
     t = trials[session["index"]]
+    if session.get("trained_block") != t["block"]:
+        return redirect(url_for("training"))  # new block: show its objects first
     return render_template("trial.html", trial=t, index=session["index"], total=len(trials),
                            zoom=trial_zoom(t), training_images=TRAINING_IMAGES)
 

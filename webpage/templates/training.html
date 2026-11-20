@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 
+{# The block's 4 objects in exactly the grid and order of the answer buttons that follow. #}
 {% block content %}
-<h1>{{ t.training_title }}</h1>
+<h1>{{ t.training_title.format(i=block, n=blocks) }}</h1>
 <p>{{ t.training_text }}</p>
 
-<div class="training-items">
-  {% for name, image in items.items() %}
-  <figure>
-    <img src="{{ url_for('static', filename=image) }}" alt="{{ item(name) }}">
-    <figcaption>{{ item(name) }}</figcaption>
+<div class="answers answers-{{ answer_mode }}">
+  {% for option in items %}
+  <figure class="training-card">
+    {% if option in training_images %}
+    <img src="{{ url_for('static', filename=training_images[option]) }}" alt="{{ item(option) }}">
+    {% endif %}
+    <figcaption>{{ item(option) }}</figcaption>
   </figure>
   {% endfor %}
 </div>
 
-<form method="post" action="{{ url_for('start') }}">
-  <button class="primary">{{ t.start }}</button>
+<form method="post">
+  <button class="primary">{{ t.start if block == 1 else t.continue }}</button>
 </form>
 {% endblock %}

@@ -23,9 +23,12 @@
   <li>{{ t.instr_count.format(n=trials|length)|safe }}</li>
   <li>{{ t.instr_exposure.format(s=exposure_s if lang == 'en' else exposure_s|replace('.', ','))|safe }}</li>
   <li>{{ t.instr_choose|safe }}</li>
+  <li>{{ t.instr_groups|safe }}</li>
   <li>{{ t.instr_speed|safe }}</li>
   <li>{{ t.instr_anon }}</li>
 </ul>
 
-<a class="button primary" href="{{ url_for('training') }}">{{ t.continue }}</a>
+<form method="post" action="{{ url_for('start') }}">
+  <button class="primary">{{ t.continue }}</button>
+</form>
 {% endblock %}

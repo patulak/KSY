@@ -10,9 +10,10 @@ e.g. to give the AI model exactly the same trials:
 
 For each trial the 4 answer options are the correct object plus 3 other
 items from the same category of the item list (dataset_items.md by default),
-and a zoom level (balanced across trials, random order). The answer order is
-shuffled once per seed and then kept for every trial, so an item never moves
-to another button position during one participant's test.
+and a zoom level (balanced across trials, random order). Trials are grouped
+into one block per category (block order and order within a block random).
+The answer order is shuffled once per seed and then kept for every trial, so
+an item never moves to another button position during one participant's test.
 The same seed always gives the same sequence.
 """
 
@@ -64,12 +65,30 @@ def load_categories(path: Path = ITEMS) -> list[list[str]]:
     return categories
 
 
+def category_index(entry: dict, categories: list[list[str]]) -> int:
+    correct = OBJECT_NAMES[entry["object"]]
+    for i, category in enumerate(categories):
+        if correct in category:
+            return i
+    raise ValueError(f"'{correct}' ({entry['id']}) is not in the item list – add it or use another ITEMS_FILE")
+
+
 def build_sequence(seed: int, images: list[dict], categories: list[list[str]],
                    zoom_levels: list[int] = ZOOM_LEVELS) -> dict:
     rng = random.Random(seed)
 
-    order = images[:]
-    rng.shuffle(order)
+    # Trials are grouped by category (one block per category), so the 4 answer buttons stay the
+    # same for a whole block. The blocks come in random order, and so do the images within a block.
+    blocks: dict[int, list[dict]] = {}
+    for entry in images:
+        blocks.setdefault(category_index(entry, categories), []).append(entry)
+    block_order = sorted(blocks)
+    rng.shuffle(block_order)
+    order = []
+    for b in block_order:
+        group = blocks[b][:]
+        rng.shuffle(group)
+        order += group
 
     # Zoom per trial: every level equally often (as far as the count allows), in random order.
     zooms = [zoom_levels[i % len(zoom_levels)] for i in range(len(order))]
@@ -81,17 +100,16 @@ def build_sequence(seed: int, images: list[dict], categories: list[list[str]],
 
     trials = []
     for entry, zoom in zip(order, zooms):
+        b = category_index(entry, categories)
         correct = OBJECT_NAMES[entry["object"]]
-        category = next((c for c in categories if correct in c), None)
-        if category is None:
-            raise ValueError(f"'{correct}' ({entry['id']}) is not in the item list – add it or use another ITEMS_FILE")
-        options = rng.sample([o for o in category if o != correct], OPTIONS_PER_TRIAL - 1) + [correct]
+        options = rng.sample([o for o in categories[b] if o != correct], OPTIONS_PER_TRIAL - 1) + [correct]
         options.sort(key=answer_order.index)
         trials.append({
             "image_id": entry["id"],
             "image": f"images/{entry['id']}.webp",
             "correct": correct,
             "options": options,
+            "block": block_order.index(b) + 1,
             "occlusion_percentage": entry["occlusion_percentage"],
             "key_parts_shown": entry["key_parts_shown"],
             "zoom": zoom,

@@ -99,20 +99,36 @@ button.primary, a.button {
 
 .question { margin: 16px 0 8px; }
 
-#answers {
+/* Answer buttons and training cards share this grid: always 2 x 2 (desktop and phone),
+   so every object keeps its spot from the training page through its whole block. */
+.answers {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
-#answers button { padding: 14px; font-size: 1.05rem; }
-
-@media (max-width: 500px) {
-  #answers { grid-template-columns: 1fr; }
+.answers button { padding: 14px; font-size: 1.05rem; }
+.answers-image button { padding: 6px; }   /* text fallbacks stretch to the tile height */
+.answers img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 28vh;
+  object-fit: cover;          /* crop the empty table around the object */
+  border-radius: 4px;
 }
 
-#answers button.correct { border-color: var(--ok); background: var(--ok); color: #111; }
-#answers button.wrong { border-color: var(--error); background: var(--error); color: #111; }
+.answers button.correct { border-color: var(--ok); background: var(--ok); color: #111; }
+.answers button.wrong { border-color: var(--error); background: var(--error); color: #111; }
+
+.training-card {
+  margin: 0;
+  padding: 6px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.training-card figcaption { padding: 6px 4px 0; font-size: 1.1rem; font-weight: 600; text-align: center; }
 
 /* Language choice on the intro screen */
 .language-choice { margin-bottom: 16px; color: var(--muted); }
@@ -133,7 +149,6 @@ button.primary, a.button {
   margin-top: 12px;
   border: 1px dashed var(--muted);
 }
-.view-phone #answers { grid-template-columns: 1fr; }
 
 /* Test mode panel */
 #test-panel {
@@ -151,39 +166,6 @@ button.primary, a.button {
 
 a.button { width: fit-content; padding: 10px 12px; border-radius: 6px; text-decoration: none; }
 
-/* Training screen */
-.training-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 12px;
-}
-.training-items figure {
-  margin: 0;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.training-items img { display: block; width: 100%; }
-.training-items figcaption { padding: 10px 12px; font-size: 1.15rem; font-weight: 600; }
-
-/* Image answers */
-/* 4 small tiles in one row on wide screens, 2 x 2 on narrow ones – always fits without scrolling. */
-#answers.answers-image { grid-template-columns: repeat(4, 1fr); }
-#answers.answers-image button { padding: 6px; }   /* text fallbacks stretch to the tile height */
-#answers.answers-image img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  max-height: 30vh;
-  object-fit: cover;          /* crop the empty table around the object */
-  border-radius: 4px;
-}
-
-@media (max-width: 700px) {
-  #answers.answers-image { grid-template-columns: repeat(2, 1fr); }
-}
-.view-phone #answers.answers-image { grid-template-columns: repeat(2, 1fr); }
 
 /* Test panel inputs */
 #test-panel form { display: inline-flex; gap: 6px; align-items: center; }

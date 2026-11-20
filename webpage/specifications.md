@@ -8,11 +8,12 @@ Current state: **minimum viable product** for local testing.
 ### Content & flow
 - [x] Opening the page picks a random seed and builds the image order + answer order from it (server-side).
 - [x] Intro screen lets the participant choose the language (Čeština / English) before starting, and explains the task: images are shown briefly, choose which object was hidden, answer quickly and accurately, guess if unsure. All images preload while the participant reads it.
-- [x] Training screen between intro and test: each object that has a training render, unoccluded, with its name in the chosen language (so participants learn the answer labels). "Začít test" starts the test from there.
+- [x] Trials are grouped into **blocks, one per category** (4 objects each); block order and image order within a block are random per seed.
+- [x] Before each block a training screen ("Skupina i / n") shows that block's 4 objects – unoccluded training image + name – in exactly the grid and order of the answer buttons that follow, so participants can learn the button positions.
 - [x] Each image is shown for **1 s** (`EXPOSURE_MS`), then hidden; the 4 answer options appear.
-- [x] Answer type (`ANSWER_MODE`): `text` = item names, `image` = training images on the buttons (items without a training image fall back to their name). Image answers are small tiles (4 in a row, 2 × 2 on narrow screens) and the hidden test image gives up its space, so all answers fit on screen without scrolling.
+- [x] Answer type (`ANSWER_MODE`): `text` = item names, `image` = training images on the buttons (items without a training image fall back to their name). Answers and training cards always use the same 2 × 2 grid (desktop and phone); the hidden test image gives up its space, so all answers fit on screen without scrolling.
 - [x] 4 options (4AFC): the correct object + 3 other items from the **same category** of the item list (`ITEMS_FILE`, default `dataset_items.md`).
-- [x] Answer positions stay fixed during a test: the answer order is shuffled once per participant (seed) and kept for every trial.
+- [x] Answer positions stay fixed during a test: the answer order is shuffled once per participant (seed) and kept for every trial, from the training screen through the whole block.
 - [x] Alternate item list `alternate_items.md` (repo root, same format): replaces items whose names get mixed up (e.g. Zvýrazňovač → Křída, because people call a highlighter "fix"). Switch with `ITEMS_FILE = "alternate_items.md"`.
 - [x] End screen with a short summary (correct count, total time).
 - [x] No participant ID input – an anonymous random ID is generated.
@@ -27,7 +28,7 @@ Current state: **minimum viable product** for local testing.
 - [x] Reaction time is measured in the browser, from the moment the answers appear to the click (ms).
 - [x] Total test time is measured.
 - [x] Each answered trial is appended immediately to `results/<participant>.csv` on the server (partial data kept).
-- CSV columns: `participant, seed, language, trial_order, image_id, occlusion_percentage, key_parts_shown, options, correct_answer, chosen_answer, is_correct, reaction_time_ms, exposure_ms, zoom, answer_mode, colors, timestamp`.
+- CSV columns: `participant, seed, language, trial_order, block, image_id, occlusion_percentage, key_parts_shown, options, correct_answer, chosen_answer, is_correct, reaction_time_ms, exposure_ms, zoom, answer_mode, colors, timestamp`.
 - Answers are always stored by their Czech item name (from `assets/items.md`), whatever language was shown.
 - [x] Double-submits / back button cannot record the same trial twice.
 
