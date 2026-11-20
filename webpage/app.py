@@ -29,7 +29,7 @@ from generate_sequence import OBJECT_NAMES, ROOT, build_sequence, load_categorie
 from translations import DEFAULT_LANGUAGE, LANGUAGES, UI, item_name
 
 # ---------- Experiment settings ----------
-TEST_MODE = 1# True: red test panel, countdowns, slow transitions, Flask debugger. False for real participants.
+TEST_MODE = 0# True: red test panel, countdowns, slow transitions, Flask debugger. False for real participants.
 EXPOSURE_MS = 1000      # how long each image is shown before the answers appear
 NEXT_DELAY_S = 2        # test mode only: pause after an answer before the next image
 ZOOM_LEVELS = [1, 2]    # each trial gets one of these (balanced, order random per seed); [1] = never zoom
