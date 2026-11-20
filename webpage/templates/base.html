@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   {% block head %}{% endblock %}
 </head>
-<body class="view-{{ view }}">
+<body class="view-{{ view }} colors-{{ colors }}">
   {% if test_mode %}
   <nav id="test-panel">
     <strong>TEST</strong>
@@ -20,6 +20,8 @@
     zoom {% for z in zoom_choices %}<a href="{{ url_for('set_option', zoom=z) }}" {% if z == zoom_choice %}class="on"{% endif %}>{{ z if z == 'random' else z ~ '×' }}</a>{% endfor %}
     <span>|</span>
     answers {% for m in answer_modes %}<a href="{{ url_for('set_option', answer_mode=m) }}" {% if m == answer_mode %}class="on"{% endif %}>{{ m }}</a>{% endfor %}
+    <span>|</span>
+    images {% for c in color_choices %}<a href="{{ url_for('set_option', colors=c) }}" {% if c == colors %}class="on"{% endif %}>{{ c }}</a>{% endfor %}
     <span>|</span>
     <form action="{{ url_for('set_option') }}">
       <label>exposure <input type="number" name="exposure_ms" value="{{ exposure_ms }}" min="50" max="10000" step="50"> ms</label>

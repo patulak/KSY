@@ -24,22 +24,24 @@ from pathlib import Path
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from generate_sequence import OBJECT_NAMES, build_sequence, load_categories, load_images
+from generate_sequence import OBJECT_NAMES, ROOT, build_sequence, load_categories, load_images
 from translations import DEFAULT_LANGUAGE, LANGUAGES, UI, item_name
 
 # ---------- Experiment settings ----------
-TEST_MODE = True        # True: red test panel, countdowns, slow transitions, Flask debugger. False for real participants.
+TEST_MODE = 1# True: red test panel, countdowns, slow transitions, Flask debugger. False for real participants.
 EXPOSURE_MS = 1000      # how long each image is shown before the answers appear
-NEXT_DELAY_S = 3        # test mode only: pause after an answer before the next image
+NEXT_DELAY_S = 2        # test mode only: pause after an answer before the next image
 ZOOM_LEVELS = [1, 2]    # each trial gets one of these (balanced, order random per seed); [1] = never zoom
 ANSWER_MODE = "text"    # "text" = answer buttons with names, "image" = answer buttons with training images
+IMAGE_COLORS = "gray"   # "gray" = all images shown in grayscale, "color" = original colours
+ITEMS_FILE = "dataset_items.md"  # answer item list, relative to the repository root (also: assets/items.md, alternate_items.md)
 
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 TRAINING_DIR = Path(__file__).resolve().parent / "static" / "images" / "training"
 CSV_COLUMNS = [
     "participant", "seed", "language", "trial_order", "image_id", "occlusion_percentage", "key_parts_shown",
     "options", "correct_answer", "chosen_answer", "is_correct", "reaction_time_ms", "exposure_ms", "zoom",
-    "answer_mode", "timestamp",
+    "answer_mode", "colors", "timestamp",
 ]
 
 # Test-panel choices (first value = default).
@@ -47,13 +49,14 @@ THEMES = ["dark", "light", "contrast"]
 VIEWS = ["desktop", "phone"]
 ZOOM_CHOICES = ["random", "1", "2"]   # "random" = use the per-trial zoom from the sequence
 ANSWER_MODES = ["text", "image"]
-TEST_PANEL_KEYS = ("theme", "view", "zoom", "answer_mode", "exposure_ms", "next_delay_s")
+COLORS = ["gray", "color"]
+TEST_PANEL_KEYS = ("theme", "view", "zoom", "answer_mode", "colors", "exposure_ms", "next_delay_s")
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
 
 IMAGES = load_images()
-CATEGORIES = load_categories()
+CATEGORIES = load_categories(ROOT / ITEMS_FILE)
 # Czech item name -> its training image, for items that have one.
 TRAINING_IMAGES = {name: f"images/training/{obj}.webp"
                    for obj, name in OBJECT_NAMES.items() if (TRAINING_DIR / f"{obj}.webp").exists()}
@@ -83,10 +86,11 @@ def template_globals():
         "lang": lang, "t": UI[lang], "languages": LANGUAGES,
         "item": lambda name: item_name(name, lang),
         "test_mode": TEST_MODE,
-        "theme": setting("theme", THEMES[0]), "view": setting("view", VIEWS[0]),
+        "theme": setting("theme", THEMES[0]), "view": setting("view", VIEWS[0]), "colors": setting("colors", IMAGE_COLORS),
         "zoom_choice": str(setting("zoom", "random")), "answer_mode": setting("answer_mode", ANSWER_MODE),
         "exposure_ms": setting("exposure_ms", EXPOSURE_MS), "next_delay_s": setting("next_delay_s", NEXT_DELAY_S),
         "themes": THEMES, "views": VIEWS, "zoom_choices": ZOOM_CHOICES, "answer_modes": ANSWER_MODES,
+        "color_choices": COLORS,
     }
 
 
@@ -96,7 +100,8 @@ def set_option():
     if request.args.get("lang") in LANGUAGES:
         session["lang"] = request.args["lang"]
     if TEST_MODE:
-        choices = (("theme", THEMES), ("view", VIEWS), ("zoom", ZOOM_CHOICES), ("answer_mode", ANSWER_MODES))
+        choices = (("theme", THEMES), ("view", VIEWS), ("zoom", ZOOM_CHOICES), ("answer_mode", ANSWER_MODES),
+                   ("colors", COLORS))
         for key, allowed in choices:
             if request.args.get(key) in allowed:
                 session[key] = request.args[key]
@@ -163,6 +168,7 @@ def trial():
             "exposure_ms": setting("exposure_ms", EXPOSURE_MS),
             "zoom": trial_zoom(t),
             "answer_mode": setting("answer_mode", ANSWER_MODE),
+            "colors": setting("colors", IMAGE_COLORS),
             "timestamp": datetime.now().isoformat(timespec="seconds"),
         })
         session["index"] += 1

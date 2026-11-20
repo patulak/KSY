@@ -72,10 +72,10 @@ environment that has the packages from `requirements.txt` (Flask, Pillow) – we
 - Windows: `../RPZ/.venv/Scripts/python`
 - Linux / macOS: `../RPZ/.venv/bin/python`
 
-`blender` means the Blender 4.x executable (on PATH, or its full path on your system).
+`blender` means the Blender 5.x executable (on PATH, or its full path on your system).
 
 ```bash
-blender -b base_scene.blend -P webpage/render_training.py   # training renders (only after model changes)
+blender -b -P webpage/render_training.py                     # training renders (only after scene changes)
 python webpage/convert_images.py                            # renders -> webpage/static/images/*.webp
 python webpage/app.py                                       # open http://localhost:5000
 ```

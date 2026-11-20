@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "notes": {
-    "occlusion_percentage": "Percentage encoded in the image filename; verify whether it denotes covered or visible area before analysis.",
-    "key_parts_shown": "0 for filenames ending in _nokey; null for other images until manually annotated.",
+    "occlusion_percentage": "Number from the image filename. Looking at the renders it seems to be the VISIBLE part of the object (e.g. rake_5 / whisk_5 show almost nothing, spatula_90 shows most of it), not the covered part – verify before analysis.",
+    "key_parts_shown": "0 for filenames ending in _nokey; otherwise assumed all key parts visible (= key_parts_total) – verify by looking at the image.",
     "difficulty": "Optional measured or manually assigned difficulty; null until evaluated."
   },
   "images": [
@@ -70,6 +70,171 @@
       "occlusion_percentage": 25,
       "key_parts_total": 1,
       "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_broom_15",
+      "image_path": "renders/book_broom_15.png",
+      "object": "broom",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 15,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_bucket_20",
+      "image_path": "renders/book_bucket_20.png",
+      "object": "bucket",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 20,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_hammer_20",
+      "image_path": "renders/book_hammer_20.png",
+      "object": "hammer",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 20,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_pencil_10_nokey",
+      "image_path": "renders/book_pencil_10_nokey.png",
+      "object": "pencil",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 10,
+      "key_parts_total": 2,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_pencil_25",
+      "image_path": "renders/book_pencil_25.png",
+      "object": "pencil",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 25,
+      "key_parts_total": 2,
+      "key_parts_shown": 2,
+      "difficulty": null
+    },
+    {
+      "id": "book_pliers_40_nokey",
+      "image_path": "renders/book_pliers_40_nokey.png",
+      "object": "pliers",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 40,
+      "key_parts_total": 2,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_rake_5",
+      "image_path": "renders/book_rake_5.png",
+      "object": "rake",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 5,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_ruler_40",
+      "image_path": "renders/book_ruler_40.png",
+      "object": "ruler",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 40,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_screwdriver_50_nokey",
+      "image_path": "renders/book_screwdriver_50_nokey.png",
+      "object": "screwdriver",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 50,
+      "key_parts_total": 1,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_shovel_40_nokey",
+      "image_path": "renders/book_shovel_40_nokey.png",
+      "object": "shovel",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 40,
+      "key_parts_total": 1,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_spatula_90_nokey",
+      "image_path": "renders/book_spatula_90_nokey.png",
+      "object": "spatula",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 90,
+      "key_parts_total": 1,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_spoon_50_nokey",
+      "image_path": "renders/book_spoon_50_nokey.png",
+      "object": "spoon",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 50,
+      "key_parts_total": 1,
+      "key_parts_shown": 0,
+      "difficulty": null
+    },
+    {
+      "id": "book_tongs_50",
+      "image_path": "renders/book_tongs_50.png",
+      "object": "tongs",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 50,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_whisk_5",
+      "image_path": "renders/book_whisk_5.png",
+      "object": "whisk",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 5,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
+      "difficulty": null
+    },
+    {
+      "id": "book_wrench_10",
+      "image_path": "renders/book_wrench_10.png",
+      "object": "wrench",
+      "occluder": "book",
+      "category": null,
+      "occlusion_percentage": 10,
+      "key_parts_total": 1,
+      "key_parts_shown": 1,
       "difficulty": null
     }
   ]

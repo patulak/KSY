@@ -1,83 +1,54 @@
-"""Render training images: each answer object alone on the table, not occluded.
+"""Render training images: each object exactly as in its test scene, but without the book.
 
-Run from the repository root with Blender 4.x (base_scene.blend is a Blender 4.2 file);
+Run from the repository root with Blender 5.x (the test scenes are Blender 5 files);
 "blender" = the Blender executable (on PATH, or its full path on your system):
-    blender -b base_scene.blend -P webpage/render_training.py
+    blender -b -P webpage/render_training.py              # all objects
+    blender -b -P webpage/render_training.py -- pen rake  # only some objects
 
 Then convert to WebP for the webpage:
     python webpage/convert_images.py
 
-Uses the table, lighting and HDR from base_scene.blend, hides the book,
-appends each model from assets/models/, places it in the middle of the
-table top and renders it with its own camera so the whole object is visible.
+For every object this opens its test scene (book_*.blend), hides the book and
+zooms the scene camera onto the object by changing only the focal length and
+lens shift. The camera stays where it is, so the object keeps the same pose,
+perspective, lighting and table as in the test images – just unoccluded and larger.
 Output: renders/training/<object>.png
 """
 
-import math
+import sys
 from pathlib import Path
 
 import bpy
+from bpy_extras.object_utils import world_to_camera_view
 from mathutils import Vector
 
-ROOT = Path(bpy.data.filepath).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = ROOT / "renders" / "training"
 
-# Database object -> model file in assets/models and its rotation on the table (degrees around Z).
-MODELS = {
-    "pen": ("fountain-pen-ste_*/*.blend", 110),
-    "marker": ("red-whiteboard-m_*/*.blend", 20),
+# Database object -> test scene it is taken from (any scene of that object works; the pose is the same).
+SCENES = {
+    "pen": "book_pen_25.blend",
+    "marker": "book_marker_10.blend",
+    "pencil": "book_pencil.blend",
+    "ruler": "book_crayon.blend",
+    "hammer": "book_hammer.blend",
+    "screwdriver": "book_screwdriver.blend",
+    "pliers": "book_pliers.blend",
+    "wrench": "book_wrench.blend",
+    "spoon": "book_spoon.blend",
+    "spatula": "book_spatula.blend",
+    "whisk": "book_whisk.blend",
+    "tongs": "book_tongs.blend",
+    "broom": "book_broom.blend",
+    "bucket": "book_mop.blend",
+    "rake": "book_rake.blend",
+    "shovel": "book_shovel.blend",
 }
-SCALE = 7.061              # base_scene objects are ~7x real size (table: 0.72 m -> 5.08 units)
-TABLE_CENTER = Vector((0.264, -0.288, 2.084))  # middle of the table top in base_scene
-CAMERA_DISTANCE = 2.5
-CAMERA_ELEVATION_DEG = 35
-RESOLUTION = (1920, 1080)
+STATIC_ROOTS = ("Vintage Office Dictionary Book", "Table")  # everything else in the scene is the object
+BOOK = "Vintage Office Dictionary Book"
+FILL = 0.6                 # object takes up this share of the image width/height
+RESOLUTION = (1920, 1080)  # same 16:9 aspect as the test renders
 SAMPLES = 64
-
-
-def world_bbox(objects) -> tuple[Vector, Vector]:
-    points = [o.matrix_world @ Vector(c) for o in objects if o.type == "MESH" and not o.hide_render
-              for c in o.bound_box]
-    lo = Vector(min(p[i] for p in points) for i in range(3))
-    hi = Vector(max(p[i] for p in points) for i in range(3))
-    return lo, hi
-
-
-def append_model(path: Path) -> list:
-    with bpy.data.libraries.load(str(path), link=False) as (data_from, data_to):
-        data_to.objects = data_from.objects
-    for obj in data_to.objects:
-        bpy.context.scene.collection.objects.link(obj)
-    return data_to.objects
-
-
-def place(objects, rotation_deg: float) -> None:
-    roots = [o for o in objects if o.parent is None]
-    for o in roots:
-        o.scale = [s * SCALE for s in o.scale]
-        o.location = o.location * SCALE
-        o.rotation_euler.z += math.radians(rotation_deg)
-    bpy.context.view_layer.update()
-
-    # Centre the object on the table, resting on the top.
-    lo, hi = world_bbox(objects)
-    offset = TABLE_CENTER - Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z))
-    for o in roots:
-        o.location += offset
-    bpy.context.view_layer.update()
-
-
-def make_camera(target: Vector):
-    elevation = math.radians(CAMERA_ELEVATION_DEG)
-    camera = bpy.data.objects.new("TrainingCamera", bpy.data.cameras.new("TrainingCamera"))
-    camera.location = target + Vector((0, -math.cos(elevation), math.sin(elevation))) * CAMERA_DISTANCE
-    bpy.context.scene.collection.objects.link(camera)
-    track = camera.constraints.new("TRACK_TO")
-    track.target = bpy.data.objects.new("TrainingTarget", None)
-    track.target.location = target
-    bpy.context.scene.collection.objects.link(track.target)
-    track.track_axis, track.up_axis = "TRACK_NEGATIVE_Z", "UP_Y"
-    return camera
 
 
 def fix_missing_images() -> None:
@@ -89,10 +60,33 @@ def fix_missing_images() -> None:
         if local:
             image.filepath = str(local)
             image.reload()
-            print(f"Relinked {image.name} -> {local}")
 
 
-def main() -> None:
+def object_meshes(scene) -> list:
+    roots = [o for o in scene.objects if o.parent is None and o.type in ("MESH", "EMPTY")
+             and not o.name.startswith(STATIC_ROOTS)]
+    objects = [o for root in roots for o in (root, *root.children_recursive)]
+    return [o for o in objects if o.type == "MESH" and not o.hide_render]
+
+
+def frame_object(scene, meshes) -> None:
+    """Zoom the scene camera onto the meshes without moving it (focal length + lens shift)."""
+    camera = scene.camera
+    points = [world_to_camera_view(scene, camera, o.matrix_world @ Vector(c)) for o in meshes for c in o.bound_box]
+    lo_x, hi_x = min(p.x for p in points), max(p.x for p in points)
+    lo_y, hi_y = min(p.y for p in points), max(p.y for p in points)
+
+    zoom = FILL / max(hi_x - lo_x, hi_y - lo_y)
+    aspect = scene.render.resolution_y / scene.render.resolution_x  # shift is measured in image widths
+    data = camera.data
+    offset_x = (lo_x + hi_x) / 2 - 0.5 + data.shift_x
+    offset_y = ((lo_y + hi_y) / 2 - 0.5) * aspect + data.shift_y
+    data.lens *= zoom
+    data.shift_x, data.shift_y = offset_x * zoom, offset_y * zoom
+
+
+def render(name: str, scene_file: str) -> None:
+    bpy.ops.wm.open_mainfile(filepath=str(ROOT / scene_file))
     fix_missing_images()
     scene = bpy.context.scene
     scene.render.resolution_x, scene.render.resolution_y = RESOLUTION
@@ -100,25 +94,20 @@ def main() -> None:
     scene.render.image_settings.file_format = "PNG"
     scene.eevee.taa_render_samples = SAMPLES
 
-    # Hide the occluder (book) – training shows the object on its own.
-    for o in bpy.data.objects:
-        if "Book" in o.name:
-            o.hide_render = True
+    for o in bpy.data.objects[BOOK].children_recursive + [bpy.data.objects[BOOK]]:
+        o.hide_render = True
+    frame_object(scene, object_meshes(scene))
 
+    scene.render.filepath = str(OUTPUT_DIR / f"{name}.png")
+    bpy.ops.render.render(write_still=True)
+    print(f"Rendered {scene.render.filepath}")
+
+
+def main() -> None:
+    wanted = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else list(SCENES)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    for name, (pattern, rotation) in MODELS.items():
-        path = next((ROOT / "assets" / "models").glob(pattern))
-        objects = append_model(path)
-        place(objects, rotation)
-
-        lo, hi = world_bbox(objects)
-        scene.camera = make_camera((lo + hi) / 2)
-        scene.render.filepath = str(OUTPUT_DIR / f"{name}.png")
-        bpy.ops.render.render(write_still=True)
-        print(f"Rendered {scene.render.filepath}")
-
-        for o in objects:
-            o.hide_render = True  # keep the scene clean for the next model
+    for name in wanted:
+        render(name, SCENES[name])
 
 
 if __name__ == "__main__":

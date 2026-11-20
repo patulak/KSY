@@ -74,6 +74,26 @@ ITEM_NAMES = {
         "Šroubovák": "Screwdriver",
         "Kleště": "Pliers",
         "Klíč na matice": "Wrench",
+        # alternate_items.md
+        "Noviny": "Newspaper",
+        "Obálka": "Envelope",
+        "Pohlednice": "Postcard",
+        "Talíř": "Plate",
+        "Konvice": "Kettle",
+        "Křída": "Chalk",
+        "Struhadlo": "Grater",
+        "Mýdlo": "Soap",
+        "Svinovací metr": "Tape measure",
+        # dataset_items.md
+        "Pravítko": "Ruler",
+        "Lžička": "Teaspoon",
+        "Stěrka": "Spatula",
+        "Metla": "Whisk",
+        "Kleštičky": "Tongs",
+        "Koště": "Broom",
+        "Kbelík": "Bucket",
+        "Hrábě": "Rake",
+        "Lopata": "Shovel",
     },
 }
 

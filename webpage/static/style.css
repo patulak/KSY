@@ -190,3 +190,6 @@ a.button { width: fit-content; padding: 10px 12px; border-radius: 6px; text-deco
 #test-panel label { display: inline; margin: 0; color: inherit; }
 #test-panel input { width: 5.5em; padding: 1px 4px; max-width: none; }
 #test-panel button { padding: 1px 8px; }
+
+/* Grayscale images (test panel: images gray) – stimulus, training and answer images */
+.colors-gray img { filter: grayscale(1); }
