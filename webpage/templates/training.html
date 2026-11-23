@@ -4,8 +4,9 @@
 {% block content %}
 <h1>{{ t.training_title.format(i=block, n=blocks) }}</h1>
 <p>{{ t.training_text }}</p>
+<p class="answer-mode-note">{{ (t.training_mode_image if mode == "image" else t.training_mode_text)|safe }}</p>
 
-<div class="answers answers-{{ answer_mode }}">
+<div class="answers answers-{{ mode }}">
   {% for option in items %}
   <figure class="training-card">
     {% if option in training_images %}

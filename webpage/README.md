@@ -99,7 +99,8 @@ How it differs from Flask:
 - Each participant gets one of 500 pre-generated sequences (seeds 0–499) at random. The seed is saved
   with every answer, so `python webpage/generate_sequence.py <seed>` rebuilds exactly what they saw.
 - Every answer is sent to a Google Sheet right after the click. Unsent answers are queued in the
-  browser and retried, so leaving early or a dropped connection loses nothing. Same columns as the CSV.
+  browser and retried, so leaving early or a dropped connection loses nothing. Same columns as the CSV,
+  plus `received_at` (Google's clock when the row arrived; `timestamp` is the participant's own clock).
 - Reloading the page mid-test continues at the same image (progress is kept in `localStorage`).
 - Test mode: open the page with `?test=1` (`?test=0` turns it off). Test answers go to the `test` sheet.
 

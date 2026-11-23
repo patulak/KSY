@@ -28,7 +28,22 @@
   <li>{{ t.instr_anon }}</li>
 </ul>
 
-<form method="post" action="{{ url_for('start') }}">
+<form method="post" action="{{ url_for('start') }}" class="about">
+  <h2>{{ t.about_title }}</h2>
+  <fieldset>
+    <legend>{{ t.age_label }}</legend>
+    {% for code in age_groups %}
+    <label class="choice"><input type="radio" name="age_group" value="{{ code }}" required> {{ t.age_groups[code] }}</label>
+    {% endfor %}
+  </fieldset>
+  <fieldset>
+    <legend>{{ t.device_label }}</legend>
+    {% for code in devices %}
+    <label class="choice"><input type="radio" name="device" value="{{ code }}" required> {{ t.devices[code] }}</label>
+    {% endfor %}
+  </fieldset>
+  <input type="hidden" name="screen" id="screen">
+  <script>document.getElementById("screen").value = `${screen.width}x${screen.height}`;</script>
   <button class="primary">{{ t.continue }}</button>
 </form>
 {% endblock %}

@@ -175,3 +175,20 @@ a.button { width: fit-content; padding: 10px 12px; border-radius: 6px; text-deco
 
 /* Grayscale images (test panel: images gray) – stimulus, training and answer images */
 .colors-gray img { filter: grayscale(1); }
+
+/* Training screen: which answer type this block uses */
+.answer-mode-note { color: var(--accent); }
+
+/* Intro: age group and device (radio buttons) */
+.about h2 { font-size: 1.2rem; margin: 24px 0 4px; }
+.about fieldset { margin: 10px 0; padding: 6px 12px 10px; border: 1px solid var(--border); border-radius: 6px; }
+.about legend { padding: 0 4px; color: var(--muted); }
+.about .choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 16px 0 0;
+  color: var(--text);
+  cursor: pointer;
+}
+.about .choice input { width: auto; margin: 0; accent-color: var(--accent); }

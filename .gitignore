@@ -1,5 +1,10 @@
-/renders/**/*.png  # Ignore PNGs in renders and subdirectories
+# Ignore PNGs in renders and subdirectories (a comment on the same line would break the pattern)
+/renders/**/*.png
 
 # Webpage: participant results
 webpage/results/
 __pycache__/
+
+# IDE / local tool settings
+.idea/
+.claude/

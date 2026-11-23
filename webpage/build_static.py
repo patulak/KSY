@@ -20,6 +20,7 @@ app.py, then commit docs/.
 
 import argparse
 import json
+import re
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -53,6 +54,8 @@ def build_data(count: int) -> dict:
             "answer_mode": flask_app.ANSWER_MODES, "colors": flask_app.COLORS,
         },
         "csv_columns": flask_app.CSV_COLUMNS,
+        "age_groups": flask_app.AGE_GROUPS,
+        "devices": flask_app.DEVICES,
         "languages": LANGUAGES,
         "default_language": DEFAULT_LANGUAGE,
         "ui": UI,
@@ -65,10 +68,11 @@ def build_data(count: int) -> dict:
             "key_parts_shown": entry["key_parts_shown"],
         } for entry in images],
         "items": items,
-        # Compact: one trial = [image index, zoom, [option indices into "items"]].
+        # Compact: one trial = [image index, zoom, [option indices into "items"], block, answer mode].
         "sequences": [{
             "seed": seq["seed"],
-            "trials": [[image_index[t["image_id"]], t["zoom"], [item_index[o] for o in t["options"]]]
+            "trials": [[image_index[t["image_id"]], t["zoom"], [item_index[o] for o in t["options"]],
+                        t["block"], t["answer_mode"]]
                        for t in seq["trials"]],
         } for seq in sequences],
     }
@@ -87,6 +91,14 @@ def main() -> None:
     shutil.rmtree(DOCS / "images", ignore_errors=True)   # drop images that no longer exist
     shutil.copytree(STATIC / "images", DOCS / "images")
     (DOCS / ".nojekyll").touch()                          # serve files as they are, no Jekyll build
+
+    # Cache busting: browsers (and GitHub Pages, ~10 min) cache files, so after a rebuild they could mix an
+    # old style.css/app.js with the new data.json. A new ?v=… on every build forces the fresh files.
+    version = data["build"].replace(":", "").replace("-", "")
+    index = DOCS / "index.html"
+    html = re.sub(r'(href="style\.css|src="(?:app|config)\.js)(\?v=[^"]*)?"', rf'\1?v={version}"',
+                  index.read_text(encoding="utf-8"))
+    index.write_text(html, encoding="utf-8")
 
     size_kb = (DOCS / "data.json").stat().st_size / 1024
     print(f"docs/: {args.count} sequences x {len(data['images'])} trials, data.json {size_kb:.0f} kB")

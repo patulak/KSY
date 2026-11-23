@@ -11,21 +11,27 @@
  *      (keeps the same URL).
  *
  * Sheets "results" (real participants) and "test" (test mode) are created automatically with the
- * same columns as the Flask CSV files. File -> Download -> CSV gives the same format as webpage/results/.
+ * same columns as the Flask CSV files plus "received_at" (server time when the row arrived).
+ * File -> Download -> CSV gives the same format as webpage/results/ with that one extra column.
  */
 
 const ID_PATTERN = /^[0-9a-f]{8}$/;
 // Stored as plain text, so Sheets doesn't turn e.g. participant "1234e567" into a number or reformat dates.
-const TEXT_COLUMNS = ["participant", "language", "image_id", "options", "correct_answer", "chosen_answer",
-                      "answer_mode", "colors", "timestamp"];
+// ("20-29" would become a date, "390x844" stays text anyway but is listed for clarity.)
+const TEXT_COLUMNS = ["participant", "language", "age_group", "device", "screen", "image_id", "options",
+                      "correct_answer", "chosen_answer", "answer_mode", "colors", "timestamp", "received_at"];
+// "timestamp" = participant's computer clock at the click (can be wrong or in another time zone);
+// "received_at" = Google's clock when the row arrived (reliable; later than the click if it was resent).
+const TIME_ZONE = "Europe/Prague";
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);   // one request at a time, so simultaneous participants don't overwrite each other
   try {
     const data = JSON.parse(e.postData.contents);
-    const columns = Array.isArray(data.columns) ? data.columns.map(String) : [];
+    const columns = Array.isArray(data.columns) ? data.columns.map(String).concat("received_at") : [];
     const rows = Array.isArray(data.rows) ? data.rows.slice(0, 50) : [];
+    const receivedAt = Utilities.formatDate(new Date(), TIME_ZONE, "yyyy-MM-dd'T'HH:mm:ss");
     const cache = CacheService.getScriptCache();
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     let saved = 0;
@@ -38,6 +44,7 @@ function doPost(e) {
 
       const sheet = getSheet(spreadsheet, row.test ? "test" : "results", columns);
       const header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+      row.received_at = receivedAt;
       const values = header.map((name) => (name in row && row[name] !== null ? row[name] : ""));
       const target = sheet.getRange(sheet.getLastRow() + 1, 1, 1, values.length);
       target.setNumberFormats([header.map((name) => (TEXT_COLUMNS.includes(name) ? "@" : "General"))]);

@@ -8,10 +8,11 @@ Current state: **minimum viable product** for local testing.
 ### Content & flow
 - [x] Opening the page picks a random seed and builds the image order + answer order from it (server-side).
 - [x] Intro screen lets the participant choose the language (Čeština / English) before starting, and explains the task: images are shown briefly, choose which object was hidden, answer quickly and accurately, guess if unsure. All images preload while the participant reads it.
+- [x] Intro screen also asks (both required, radio buttons) for the **age group** (`<20`, `20-29`, `30-49`, `50+`) and the **device** (`phone`, `tablet`, `computer`, `other`); the screen size in px is recorded automatically. All three are saved with every trial (`age_group`, `device`, `screen` columns). Lists: `AGE_GROUPS` / `DEVICES` in `app.py`, labels in `translations.py`.
 - [x] Trials are grouped into **blocks, one per category** (4 objects each); block order and image order within a block are random per seed.
 - [x] Before each block a training screen ("Skupina i / n") shows that block's 4 objects – unoccluded training image + name – in exactly the grid and order of the answer buttons that follow, so participants can learn the button positions.
 - [x] Each image is shown for **1 s** (`EXPOSURE_MS`), then hidden; the 4 answer options appear.
-- [x] Answer type (`ANSWER_MODE`): `text` = item names, `image` = training images on the buttons (items without a training image fall back to their name). Answers and training cards always use the same 2 × 2 grid (desktop and phone); the hidden test image gives up its space, so all answers fit on screen without scrolling.
+- [x] Answer type (`ANSWER_MODE`): default `random` = per block, half of the blocks answer with item names and half with training images, assignment random per participant; `text` / `image` force one type for all blocks. The training screen tells which type the block uses; the CSV `answer_mode` column records it per trial. Answers and training cards always use the same 2 × 2 grid (desktop and phone); the hidden test image gives up its space, so all answers fit on screen without scrolling.
 - [x] 4 options (4AFC): the correct object + 3 other items from the **same category** of the item list (`ITEMS_FILE`, default `dataset_items.md`).
 - [x] Answer positions stay fixed during a test: the answer order is shuffled once per participant (seed) and kept for every trial, from the training screen through the whole block.
 - [x] Alternate item list `alternate_items.md` (repo root, same format): replaces items whose names get mixed up (e.g. Zvýrazňovač → Křída, because people call a highlighter "fix"). Switch with `ITEMS_FILE = "alternate_items.md"`.
@@ -43,7 +44,7 @@ Current state: **minimum viable product** for local testing.
 ### Settings and test mode
 - [x] All experiment settings are constants at the top of `app.py`: `TEST_MODE`, `EXPOSURE_MS`, `NEXT_DELAY_S`, `ZOOM_LEVELS`, `ANSWER_MODE`, `IMAGE_COLORS`, `ITEMS_FILE`.
 - [x] `TEST_MODE = True` turns on the test panel, countdowns and the Flask debugger; `False` turns them off (for real participants). Auto-reload is always on, so saving `app.py` applies changes to a running server.
-- [x] Red panel at the top: language, colour theme (dark / light / contrast), desktop / phone view (390 px), zoom (random / 1× / 2×), answer type (text / image), images gray / colour (overrides `IMAGE_COLORS`), exposure time (ms) and next-image delay (s), restart; shows participant ID and seed.
+- [x] Red panel at the top: language, colour theme (dark / light / contrast), desktop / phone view (390 px), zoom (random / 1× / 2×), answer type (random / text / image), images gray / colour (overrides `IMAGE_COLORS`), exposure time (ms) and next-image delay (s), restart; shows participant ID and seed.
 - [x] Visible countdown of the image exposure; correct answer and image ID shown.
 - [x] After answering, the right/wrong answer is highlighted and the next image comes after a countdown (`NEXT_DELAY_S`, changeable in the panel).
 - [x] Results are saved as `results/test_<participant>.csv` so they don't mix with real data.

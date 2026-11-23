@@ -33,23 +33,28 @@ TEST_MODE = 0# True: red test panel, countdowns, slow transitions, Flask debugge
 EXPOSURE_MS = 1000      # how long each image is shown before the answers appear
 NEXT_DELAY_S = 2        # test mode only: pause after an answer before the next image
 ZOOM_LEVELS = [1, 2]    # each trial gets one of these (balanced, order random per seed); [1] = never zoom
-ANSWER_MODE = "text"    # "text" = answer buttons with names, "image" = answer buttons with training images
+ANSWER_MODE = "random"  # "random" = per block, half text / half image (random per participant); or force "text" / "image"
 IMAGE_COLORS = "gray"   # "gray" = all images shown in grayscale, "color" = original colours
 ITEMS_FILE = "dataset_items.md"  # answer item list, relative to the repository root (also: assets/items.md, alternate_items.md)
 
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 TRAINING_DIR = Path(__file__).resolve().parent / "static" / "images" / "training"
 CSV_COLUMNS = [
-    "participant", "seed", "language", "trial_order", "block", "image_id", "occlusion_percentage", "key_parts_shown",
+    "participant", "seed", "language", "age_group", "device", "screen",
+    "trial_order", "block", "image_id", "occlusion_percentage", "key_parts_shown",
     "options", "correct_answer", "chosen_answer", "is_correct", "reaction_time_ms", "exposure_ms", "zoom",
     "answer_mode", "colors", "timestamp",
 ]
+
+# Asked on the intro screen (labels in translations.py). "screen" = screen size in px, filled in automatically.
+AGE_GROUPS = ["<20", "20-29", "30-49", "50+"]
+DEVICES = ["phone", "tablet", "computer", "other"]
 
 # Test-panel choices (first value = default).
 THEMES = ["dark", "light", "contrast"]
 VIEWS = ["desktop", "phone"]
 ZOOM_CHOICES = ["random", "1", "2"]   # "random" = use the per-trial zoom from the sequence
-ANSWER_MODES = ["text", "image"]
+ANSWER_MODES = ["random", "text", "image"]
 COLORS = ["gray", "color"]
 TEST_PANEL_KEYS = ("theme", "view", "zoom", "answer_mode", "colors", "exposure_ms", "next_delay_s")
 
@@ -73,6 +78,11 @@ def setting(key: str, default):
     if TEST_MODE:
         return session.get(key, default)
     return default
+
+
+def trial_answer_mode(trial: dict) -> str:
+    choice = setting("answer_mode", ANSWER_MODE)
+    return trial["answer_mode"] if choice == "random" else choice
 
 
 def trial_zoom(trial: dict) -> int:
@@ -121,13 +131,20 @@ def intro():
     session["participant"] = secrets.token_hex(4)
     session["seed"] = secrets.randbelow(1_000_000)
     exposure_s = f"{setting('exposure_ms', EXPOSURE_MS) / 1000:g}"
-    return render_template("intro.html", trials=current_trials(), exposure_s=exposure_s)
+    return render_template("intro.html", trials=current_trials(), exposure_s=exposure_s,
+                           age_groups=AGE_GROUPS, devices=DEVICES)
 
 
 @app.post("/start")
 def start():
     if "seed" not in session:
         return redirect(url_for("intro"))
+    age_group, device = request.form.get("age_group"), request.form.get("device")
+    if age_group not in AGE_GROUPS or device not in DEVICES:
+        return redirect(url_for("intro"))  # the form requires both; only reachable by tampering
+    session["age_group"] = age_group
+    session["device"] = device
+    session["screen"] = request.form.get("screen", "")[:20]
     session["index"] = 0
     session["correct"] = 0
     session["trained_block"] = 0
@@ -148,7 +165,7 @@ def training():
         session["trained_block"] = t["block"]
         return redirect(url_for("trial"))
     return render_template("training.html", items=t["options"], block=t["block"], blocks=trials[-1]["block"],
-                           training_images=TRAINING_IMAGES)
+                           mode=trial_answer_mode(t), training_images=TRAINING_IMAGES)
 
 
 @app.route("/trial", methods=["GET", "POST"])
@@ -166,6 +183,9 @@ def trial():
             "participant": session["participant"],
             "seed": session["seed"],
             "language": session.get("lang", DEFAULT_LANGUAGE),
+            "age_group": session.get("age_group", ""),
+            "device": session.get("device", ""),
+            "screen": session.get("screen", ""),
             "trial_order": session["index"] + 1,
             "block": t["block"],
             "image_id": t["image_id"],
@@ -178,7 +198,7 @@ def trial():
             "reaction_time_ms": request.form.get("rt", ""),
             "exposure_ms": setting("exposure_ms", EXPOSURE_MS),
             "zoom": trial_zoom(t),
-            "answer_mode": setting("answer_mode", ANSWER_MODE),
+            "answer_mode": trial_answer_mode(t),
             "colors": setting("colors", IMAGE_COLORS),
             "timestamp": datetime.now().isoformat(timespec="seconds"),
         })
@@ -192,7 +212,7 @@ def trial():
     if session.get("trained_block") != t["block"]:
         return redirect(url_for("training"))  # new block: show its objects first
     return render_template("trial.html", trial=t, index=session["index"], total=len(trials),
-                           zoom=trial_zoom(t), training_images=TRAINING_IMAGES)
+                           zoom=trial_zoom(t), mode=trial_answer_mode(t), training_images=TRAINING_IMAGES)
 
 
 @app.get("/end")

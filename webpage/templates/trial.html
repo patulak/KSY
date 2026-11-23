@@ -13,10 +13,10 @@
   <input type="hidden" name="answer" id="answer">
   <input type="hidden" name="rt" id="rt">
   <p class="question">{{ t.question }}</p>
-  <div id="answers" class="answers answers-{{ answer_mode }}">
+  <div id="answers" class="answers answers-{{ mode }}">
     {% for option in trial.options %}
     {# Image mode falls back to the name for items without a training image. #}
-    {% if answer_mode == "image" and option in training_images %}
+    {% if mode == "image" and option in training_images %}
     <button value="{{ option }}"><img src="{{ url_for('static', filename=training_images[option]) }}" alt="{{ item(option) }}"></button>
     {% else %}
     <button value="{{ option }}">{{ item(option) }}</button>

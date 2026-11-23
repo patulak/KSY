@@ -11,7 +11,8 @@ e.g. to give the AI model exactly the same trials:
 For each trial the 4 answer options are the correct object plus 3 other
 items from the same category of the item list (dataset_items.md by default),
 and a zoom level (balanced across trials, random order). Trials are grouped
-into one block per category (block order and order within a block random).
+into one block per category (block order and order within a block random);
+each block answers either with names or with images (half of the blocks each).
 The answer order is shuffled once per seed and then kept for every trial, so
 an item never moves to another button position during one participant's test.
 The same seed always gives the same sequence.
@@ -47,6 +48,7 @@ OBJECT_NAMES = {
 }
 OPTIONS_PER_TRIAL = 4
 ZOOM_LEVELS = [1, 2]  # default; app.py passes its own setting
+ANSWER_MODES = ["text", "image"]  # each block answers in one of these (balanced across blocks, random order)
 
 
 def load_images() -> list[dict]:
@@ -90,6 +92,10 @@ def build_sequence(seed: int, images: list[dict], categories: list[list[str]],
         rng.shuffle(group)
         order += group
 
+    # Answer mode per block: text names or images, each used for equally many blocks, in random order.
+    modes = [ANSWER_MODES[i % len(ANSWER_MODES)] for i in range(len(block_order))]
+    rng.shuffle(modes)
+
     # Zoom per trial: every level equally often (as far as the count allows), in random order.
     zooms = [zoom_levels[i % len(zoom_levels)] for i in range(len(order))]
     rng.shuffle(zooms)
@@ -110,6 +116,7 @@ def build_sequence(seed: int, images: list[dict], categories: list[list[str]],
             "correct": correct,
             "options": options,
             "block": block_order.index(b) + 1,
+            "answer_mode": modes[block_order.index(b)],
             "occlusion_percentage": entry["occlusion_percentage"],
             "key_parts_shown": entry["key_parts_shown"],
             "zoom": zoom,
