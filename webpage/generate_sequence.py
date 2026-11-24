@@ -12,6 +12,9 @@ For each trial the 4 answer options are the correct object plus 3 other
 items from the same category of the item list (dataset_items.md by default),
 and a zoom level (balanced across trials, random order). Trials are grouped
 into one block per category (block order and order within a block random);
+a block with more than MAX_PER_BLOCK images gets a random subset, spread
+evenly over the block's objects, and the whole test has at most MAX_TOTAL
+images (taken from the biggest blocks first);
 each block answers either with names or with images (half of the blocks each).
 The answer order is shuffled once per seed and then kept for every trial, so
 an item never moves to another button position during one participant's test.
@@ -48,6 +51,8 @@ OBJECT_NAMES = {
 }
 OPTIONS_PER_TRIAL = 4
 ZOOM_LEVELS = [1, 2]  # default; app.py passes its own setting
+MAX_PER_BLOCK = 30    # default; app.py passes its own setting. At most this many images per block (category).
+MAX_TOTAL = 60        # default; app.py passes its own setting. At most this many images in the whole test.
 ANSWER_MODES = ["text", "image"]  # each block answers in one of these (balanced across blocks, random order)
 
 
@@ -75,8 +80,32 @@ def category_index(entry: dict, categories: list[list[str]]) -> int:
     raise ValueError(f"'{correct}' ({entry['id']}) is not in the item list – add it or use another ITEMS_FILE")
 
 
+def pick_images(group: list[dict], limit: int, rng: random.Random) -> list[dict]:
+    """At most `limit` images of one block, spread evenly over its objects.
+
+    Each object's images are shuffled, then taken round-robin (objects in random order), so with
+    e.g. 49 images of 4 objects and limit 30 every object gets 7 or 8 and the rest are left out.
+    """
+    if len(group) <= limit:
+        return group[:]
+    by_object: dict[str, list[dict]] = {}
+    for entry in group:
+        by_object.setdefault(entry["object"], []).append(entry)
+    queues = list(by_object.values())
+    for queue in queues:
+        rng.shuffle(queue)
+    rng.shuffle(queues)
+    picked = []
+    while len(picked) < limit:
+        for queue in queues:
+            if queue and len(picked) < limit:
+                picked.append(queue.pop())
+    return picked
+
+
 def build_sequence(seed: int, images: list[dict], categories: list[list[str]],
-                   zoom_levels: list[int] = ZOOM_LEVELS) -> dict:
+                   zoom_levels: list[int] = ZOOM_LEVELS, max_per_block: int = MAX_PER_BLOCK,
+                   max_total: int = MAX_TOTAL) -> dict:
     rng = random.Random(seed)
 
     # Trials are grouped by category (one block per category), so the 4 answer buttons stay the
@@ -86,9 +115,18 @@ def build_sequence(seed: int, images: list[dict], categories: list[list[str]],
         blocks.setdefault(category_index(entry, categories), []).append(entry)
     block_order = sorted(blocks)
     rng.shuffle(block_order)
+    # Images per block: at most max_per_block, and together at most max_total. If the total is too
+    # high, the biggest block gives up one image at a time, so the blocks end up as even as possible.
+    limits = {b: min(len(blocks[b]), max_per_block) for b in block_order}
+    while sum(limits.values()) > max_total:
+        biggest = max(block_order, key=lambda b: limits[b])
+        if limits[biggest] <= 1:
+            break  # never drop a whole block
+        limits[biggest] -= 1
+
     order = []
     for b in block_order:
-        group = blocks[b][:]
+        group = pick_images(blocks[b], limits[b], rng)
         rng.shuffle(group)
         order += group
 

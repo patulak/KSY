@@ -33,6 +33,12 @@ TEST_MODE = 0# True: red test panel, countdowns, slow transitions, Flask debugge
 EXPOSURE_MS = 1000      # how long each image is shown before the answers appear
 NEXT_DELAY_S = 2        # test mode only: pause after an answer before the next image
 ZOOM_LEVELS = [1, 2]    # each trial gets one of these (balanced, order random per seed); [1] = never zoom
+MAX_PER_BLOCK = 30      # at most this many images per block (category) per participant, spread evenly over its objects
+MAX_TOTAL = 60          # at most this many images in the whole test per participant (biggest blocks are cut first)
+# Rough timing for the test length shown on the intro screen: per image the exposure plus this many
+# seconds to answer and move on, plus this many seconds per block for its training screen.
+SECONDS_PER_ANSWER = 2.5
+SECONDS_PER_TRAINING = 15
 ANSWER_MODE = "random"  # "random" = per block, half text / half image (random per participant); or force "text" / "image"
 IMAGE_COLORS = "gray"   # "gray" = all images shown in grayscale, "color" = original colours
 ITEMS_FILE = "dataset_items.md"  # answer item list, relative to the repository root (also: assets/items.md, alternate_items.md)
@@ -70,7 +76,15 @@ TRAINING_IMAGES = {name: f"images/training/{obj}.webp"
 
 def current_trials() -> list[dict]:
     """The sequence is never stored – it is rebuilt from the seed in the session."""
-    return build_sequence(session["seed"], IMAGES, CATEGORIES, ZOOM_LEVELS)["trials"]
+    return build_sequence(session["seed"], IMAGES, CATEGORIES, ZOOM_LEVELS, MAX_PER_BLOCK, MAX_TOTAL)["trials"]
+
+
+def duration_minutes(trials: list[dict], exposure_ms: int) -> tuple[int, int]:
+    """Estimated test length as a range of whole minutes, e.g. (3, 4). Same formula as docs/app.js."""
+    blocks = len({t["block"] for t in trials})
+    seconds = len(trials) * (exposure_ms / 1000 + SECONDS_PER_ANSWER) + blocks * SECONDS_PER_TRAINING
+    low = max(1, int(seconds // 60))
+    return low, low + 1
 
 
 def setting(key: str, default):
@@ -131,7 +145,9 @@ def intro():
     session["participant"] = secrets.token_hex(4)
     session["seed"] = secrets.randbelow(1_000_000)
     exposure_s = f"{setting('exposure_ms', EXPOSURE_MS) / 1000:g}"
-    return render_template("intro.html", trials=current_trials(), exposure_s=exposure_s,
+    trials = current_trials()
+    low, high = duration_minutes(trials, setting("exposure_ms", EXPOSURE_MS))
+    return render_template("intro.html", trials=trials, exposure_s=exposure_s, minutes_low=low, minutes_high=high,
                            age_groups=AGE_GROUPS, devices=DEVICES)
 
 

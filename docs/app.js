@@ -223,6 +223,15 @@ function preload(src) {
   preloaded.push(img);  // keep a reference so the browser keeps it cached
 }
 
+/** Estimated test length as a range of whole minutes – same formula as duration_minutes() in app.py. */
+function durationMinutes(list) {
+  const blocks = new Set(list.map((trial) => trial.block)).size;
+  const seconds = list.length * (setting("exposure_ms") / 1000 + DATA.settings.seconds_per_answer)
+    + blocks * DATA.settings.seconds_per_training;
+  const low = Math.max(1, Math.floor(seconds / 60));
+  return { low, high: low + 1 };
+}
+
 function renderIntro() {
   const tx = t(), list = trials();
   // Preload every image while the participant reads the instructions.
@@ -245,7 +254,7 @@ function renderIntro() {
       <li>${tx.instr_choose}</li>
       <li>${tx.instr_groups}</li>
       <li>${tx.instr_speed}</li>
-      <li>${esc(tx.instr_anon)}</li>
+      <li>${fmt(tx.instr_anon, durationMinutes(list))}</li>
     </ul>
     <form class="about" id="about">
       <h2>${esc(tx.about_title)}</h2>

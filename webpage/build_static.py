@@ -36,7 +36,8 @@ DOCS = flask_app.ROOT / "docs"
 def build_data(count: int) -> dict:
     images = flask_app.IMAGES
     image_index = {entry["id"]: i for i, entry in enumerate(images)}
-    sequences = [build_sequence(seed, images, flask_app.CATEGORIES, flask_app.ZOOM_LEVELS) for seed in range(count)]
+    sequences = [build_sequence(seed, images, flask_app.CATEGORIES, flask_app.ZOOM_LEVELS,
+                                flask_app.MAX_PER_BLOCK, flask_app.MAX_TOTAL) for seed in range(count)]
     items = sorted({option for seq in sequences for trial in seq["trials"] for option in trial["options"]})
     item_index = {name: i for i, name in enumerate(items)}
 
@@ -45,6 +46,8 @@ def build_data(count: int) -> dict:
         "settings": {
             "exposure_ms": flask_app.EXPOSURE_MS,
             "next_delay_s": flask_app.NEXT_DELAY_S,
+            "seconds_per_answer": flask_app.SECONDS_PER_ANSWER,
+            "seconds_per_training": flask_app.SECONDS_PER_TRAINING,
             "answer_mode": flask_app.ANSWER_MODE,
             "colors": flask_app.IMAGE_COLORS,
             "items_file": flask_app.ITEMS_FILE,
@@ -101,7 +104,8 @@ def main() -> None:
     index.write_text(html, encoding="utf-8")
 
     size_kb = (DOCS / "data.json").stat().st_size / 1024
-    print(f"docs/: {args.count} sequences x {len(data['images'])} trials, data.json {size_kb:.0f} kB")
+    trials = len(data['sequences'][0]['trials'])
+    print(f"docs/: {args.count} sequences x {trials} trials ({len(data['images'])} images), data.json {size_kb:.0f} kB")
 
 
 if __name__ == "__main__":

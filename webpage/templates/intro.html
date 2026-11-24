@@ -25,7 +25,7 @@
   <li>{{ t.instr_choose|safe }}</li>
   <li>{{ t.instr_groups|safe }}</li>
   <li>{{ t.instr_speed|safe }}</li>
-  <li>{{ t.instr_anon }}</li>
+  <li>{{ t.instr_anon.format(low=minutes_low, high=minutes_high)|safe }}</li>
 </ul>
 
 <form method="post" action="{{ url_for('start') }}" class="about">
