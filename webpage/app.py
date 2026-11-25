@@ -17,8 +17,10 @@ the participant leaves early.
 
 import argparse
 import csv
+import math
 import os
 import secrets
+import statistics
 import time
 from datetime import datetime
 from pathlib import Path
@@ -51,6 +53,12 @@ CSV_COLUMNS = [
     "options", "correct_answer", "chosen_answer", "is_correct", "reaction_time_ms", "exposure_ms", "zoom",
     "answer_mode", "colors", "timestamp",
 ]
+
+# End screen: comparison with other participants (only those with at least COMPARE_MIN_ANSWERS answers;
+# shown once there are COMPARE_MIN_OTHERS of them). Answers slower than RT_LIMIT_MS don't count for RT.
+COMPARE_MIN_ANSWERS = 10
+COMPARE_MIN_OTHERS = 3
+RT_LIMIT_MS = 10_000
 
 # Asked on the intro screen (labels in translations.py). "screen" = screen size in px, filled in automatically.
 AGE_GROUPS = ["<20", "20-29", "30-49", "50+"]
@@ -236,7 +244,145 @@ def end():
     if "started_at" not in session:
         return redirect(url_for("intro"))
     return render_template("end.html", correct=session["correct"], total=session["index"],
-                           seconds=round(time.time() - session["started_at"]))
+                           seconds=round(time.time() - session["started_at"]),
+                           compare=comparison(session["participant"], session.get("lang", DEFAULT_LANGUAGE)))
+
+
+def quantile(values: list[float], p: float) -> float | None:
+    """Linear interpolation between the sorted values (as numpy's default and quantile() in app.js / Apps Script)."""
+    if not values:
+        return None
+    v = sorted(values)
+    pos = (len(v) - 1) * p
+    i = math.floor(pos)
+    return v[i] + (v[min(i + 1, len(v) - 1)] - v[i]) * (pos - i)
+
+
+def sample_sd(values: list[float]) -> float | None:
+    """Sample standard deviation (n - 1), as statistics.stdev / sampleSd() in app.js / the Apps Script."""
+    if len(values) < 2:
+        return None
+    mean = sum(values) / len(values)
+    return math.sqrt(sum((v - mean) ** 2 for v in values) / (len(values) - 1))
+
+
+def summarize(rows: list[dict]) -> tuple[int, float, list[float]]:
+    """(answers, accuracy 0-1, RTs in ms up to RT_LIMIT_MS) of one participant's CSV rows."""
+    trials = {}
+    for row in rows:
+        trials.setdefault(row["trial_order"], row)   # ignore duplicates
+    if not trials:
+        return 0, 0.0, []
+    correct = sum(row["is_correct"] == "1" for row in trials.values())
+    rts = [float(row["reaction_time_ms"]) for row in trials.values()
+           if row["reaction_time_ms"] and 0 < float(row["reaction_time_ms"]) <= RT_LIMIT_MS]
+    return len(trials), correct / len(trials), rts
+
+
+def half_up(x: float) -> int:
+    """Round like JavaScript's Math.round (Python's round() rounds 92.5 to 92), so both versions match."""
+    return math.floor(x + 0.5)
+
+
+def compare_with(own: tuple[float, list[float]], others: list[list], lang: str) -> dict:
+    """Numbers for the end-screen comparison - same logic as compareWith() in docs/app.js.
+
+    own = (accuracy, own RTs); others = [accuracy, median RT, standard deviation of RTs] per participant,
+    the last two may be None.
+    """
+    if len(others) < COMPARE_MIN_OTHERS:
+        return {"few": True}
+    acc, own_rts = own
+    rt, sd = quantile(own_rts, 0.5), sample_sd(own_rts)
+
+    def num(x: float, digits: int = 2) -> str:
+        text = f"{x:.{digits}f}"
+        return text if lang == "en" else text.replace(".", ",")
+
+    def share(better: int, ties: int, n: int) -> int:   # "better than X % of the others", ties count half
+        return half_up(100 * (better + ties / 2) / n)
+
+    accs = [o[0] for o in others]
+    result = {
+        "few": False, "n": len(others),
+        "acc": half_up(100 * acc), "avg": half_up(100 * statistics.mean(accs)),
+        "pct": share(sum(a < acc for a in accs), sum(a == acc for a in accs), len(accs)),
+        "acc_chart": ranking_chart(accs, acc, True, 0.05, label=lambda v: f"{half_up(100 * v)} %"),
+    }
+    rts = [o[1] for o in others if o[1] is not None]
+    if rt is not None and rts:
+        result.update(rt=num(rt / 1000), rt_avg=num(statistics.median(rts) / 1000),
+                      rt_pct=share(sum(r > rt for r in rts), sum(r == rt for r in rts), len(rts)),
+                      rt_chart=ranking_chart(rts, rt, False, 100,
+                                             label=lambda v: f"{num(v / 1000)} s"))
+    # Variability of the answer times: sample standard deviation (variance = sd²); smaller = more even.
+    sds = [o[2] for o in others if len(o) > 2 and o[2] is not None]
+    if sd is not None:
+        result.update(sd=num(sd / 1000), var=num((sd / 1000) ** 2, 3))
+        if sds:
+            result.update(sd_avg=num(statistics.median(sds) / 1000),
+                          sd_pct=share(sum(x > sd for x in sds), sum(x == sd for x in sds), len(sds)))
+    return result
+
+
+RANKING_BARS = 20   # with more participants than this, each bar stands for an equal share (5 %) of them
+
+
+def ranking_chart(others: list[float], own: float, higher_is_better: bool, step: float, label) -> dict:
+    """Everyone (others + you) as bars, worst on the left, best on the right - same as rankingChart() in app.js.
+
+    x = rank (like a percentile chart, so it stays readable when nearly everyone has 90-100 %),
+    bar height = the value on an axis from just below the worst to the best value, rounded to `step`
+    (accuracy: 5 %, RT: 100 ms; for RT the axis is upside down, so faster = taller).
+    Returns {"bars": [{"h", "you", "title"}], "ticks": [top, middle, bottom labels], "rank", "total"}.
+    """
+    def worse(a: float, b: float) -> bool:
+        return a < b if higher_is_better else a > b
+
+    order = sorted(others, key=lambda v: v if higher_is_better else -v)   # worst -> best
+    below = [v for v in order if worse(v, own)]
+    equal = [v for v in order if v == own]
+    above = [v for v in order if worse(own, v)]
+    half = len(equal) // 2                                                 # you go in the middle of your equals
+    ranked = [(v, False) for v in below + equal[:half]] + [(own, True)] + [(v, False) for v in equal[half:] + above]
+    total = len(ranked)
+    if total > RANKING_BARS:   # one bar per 5 % of the participants: the value in the middle of that slice
+        you_bar = min(RANKING_BARS - 1, (len(below) + half) * RANKING_BARS // total)
+        ranked = [(own, True) if i == you_bar else (ranked[min(total - 1, int((i + 0.5) * total / RANKING_BARS))][0], False)
+                  for i in range(RANKING_BARS)]
+
+    values = [own] + others
+    worst = min(values) if higher_is_better else max(values)
+    best = max(values) if higher_is_better else min(values)
+    if higher_is_better:   # bottom of the axis one step below the worst value, so the worst bar is still visible
+        bottom, top = math.floor(worst / step - 1e-9) * step, math.ceil(best / step - 1e-9) * step
+        bottom, top = max(0.0, bottom), min(1.0, top) if step < 1 else top
+    else:
+        bottom, top = math.ceil(worst / step + 1e-9) * step, max(0.0, math.floor(best / step) * step)
+    if top == bottom:
+        top = bottom + (step if higher_is_better else -step)
+    height = lambda v: max(2, min(100, half_up(100 * (v - bottom) / (top - bottom))))
+    return {
+        "bars": [{"h": height(v), "you": is_you, "title": label(v)} for v, is_you in ranked],
+        "ticks": [label(top), label((top + bottom) / 2), label(bottom)],
+        "rank": len(above) + 1, "total": total,
+    }
+
+
+def comparison(participant: str, lang: str) -> dict | None:
+    """Compare this participant with everyone else in results/ (test mode: with the test files)."""
+    own, others = None, []
+    for path in RESULTS_DIR.glob("*.csv"):
+        if path.name.startswith("test_") != bool(TEST_MODE):
+            continue
+        with path.open(encoding="utf-8", newline="") as f:
+            rows = list(csv.DictReader(f))
+        n, acc, rts = summarize(rows)
+        if rows and rows[0]["participant"] == participant:
+            own = (acc, rts)
+        elif n >= COMPARE_MIN_ANSWERS:
+            others.append([acc, quantile(rts, 0.5), sample_sd(rts)])
+    return compare_with(own, others, lang) if own else None
 
 
 def save_row(row: dict) -> None:

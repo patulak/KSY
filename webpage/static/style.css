@@ -192,3 +192,19 @@ a.button { width: fit-content; padding: 10px 12px; border-radius: 6px; text-deco
   cursor: pointer;
 }
 .about .choice input { width: auto; margin: 0; accent-color: var(--accent); }
+
+/* End screen: comparison with other participants */
+.compare { margin-top: 24px; padding: 12px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; }
+.compare h2 { font-size: 1.2rem; margin: 0 0 8px; }
+.compare p { margin: 12px 0 4px; }
+/* Ranking chart: everyone sorted worst -> best (x = rank), bar height = value (y axis on the left) */
+.ranking { margin: 8px 0 16px; }
+.ranking .plot { display: grid; grid-template-columns: auto 1fr; column-gap: 6px; }
+.ranking .y { display: flex; flex-direction: column; justify-content: space-between; height: 100px;
+              font-size: 0.75rem; color: var(--muted); text-align: right; line-height: 1; }
+.ranking .bars { display: flex; align-items: flex-end; gap: 3px; height: 100px;
+                 border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.ranking .bar { flex: 1; height: var(--h); background: var(--muted); opacity: 0.5; border-radius: 2px 2px 0 0; }
+.ranking .bar.you { background: var(--accent); opacity: 1; }
+.ranking .x { display: flex; justify-content: space-between; gap: 8px; font-size: 0.75rem; color: var(--muted); }
+.ranking figcaption { margin-top: 4px; font-size: 0.85rem; color: var(--muted); }

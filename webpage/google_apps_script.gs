@@ -60,9 +60,81 @@ function doPost(e) {
   }
 }
 
-/** Opening the URL in a browser shows that the deployment works. */
-function doGet() {
-  return reply({ ok: true, message: "KSY results endpoint is running." });
+/**
+ * Opening the URL in a browser shows that the deployment works.
+ * ?stats=1 returns anonymous per-participant summaries for the comparison on the end screen:
+ *   participants: [[accuracy 0–1, median RT in ms or null, RT standard deviation or null], …] – no IDs.
+ *   &sheet=test uses the test sheet, &exclude=<participant> leaves that participant out,
+ *   &min=<n> only counts participants with at least n answers (default 10).
+ */
+function doGet(e) {
+  const p = (e && e.parameter) || {};
+  if (!p.stats) return reply({ ok: true, message: "KSY results endpoint is running." });
+  try {
+    const sheetName = p.sheet === "test" ? "test" : "results";
+    const minAnswers = Math.max(1, Number(p.min) || 10);
+    const summaries = participantSummaries(sheetName);
+    const participants = Object.keys(summaries)
+      .filter((id) => id !== p.exclude && summaries[id].n >= minAnswers)
+      .map((id) => [summaries[id].accuracy, summaries[id].medianRt, summaries[id].sdRt]);
+    return reply({ ok: true, participants });
+  } catch (error) {
+    return reply({ ok: false, error: String(error) });
+  }
+}
+
+const RT_LIMIT_MS = 10000;   // slower answers are left out of RT (as in analysis/analyze.py)
+
+/** {participant: {n, accuracy, medianRt}} for one sheet, cached for a minute (reading the sheet is slow). */
+function participantSummaries(sheetName) {
+  const cache = CacheService.getScriptCache();
+  const key = `summaries-${sheetName}`;
+  const cached = cache.get(key);
+  if (cached) return JSON.parse(cached);
+
+  const summaries = {};
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  if (sheet && sheet.getLastRow() > 1) {
+    const [header, ...rows] = sheet.getDataRange().getValues();
+    const col = (name) => header.indexOf(name);
+    const [iId, iTrial, iCorrect, iRt] = [col("participant"), col("trial_order"), col("is_correct"), col("reaction_time_ms")];
+    const groups = {};
+    for (const row of rows) {
+      const id = String(row[iId]);
+      const g = groups[id] || (groups[id] = { trials: {}, rts: [] });
+      if (g.trials[row[iTrial]] !== undefined) continue;   // duplicate row
+      g.trials[row[iTrial]] = Number(row[iCorrect]) === 1;
+      const rt = Number(row[iRt]);
+      if (rt > 0 && rt <= RT_LIMIT_MS) g.rts.push(rt);
+    }
+    for (const id of Object.keys(groups)) {
+      const answers = Object.values(groups[id].trials);
+      summaries[id] = {
+        n: answers.length,
+        accuracy: answers.filter(Boolean).length / answers.length,
+        medianRt: quantile(groups[id].rts, 0.5),
+        sdRt: sampleSd(groups[id].rts),   // sample standard deviation of the answer times
+      };
+    }
+  }
+  const json = JSON.stringify(summaries);
+  if (json.length < 90000) cache.put(key, json, 60);   // cache values are limited to 100 kB
+  return summaries;
+}
+
+/** Sample standard deviation (n - 1) – same as sample_sd() in webpage/app.py and sampleSd() in docs/app.js. */
+function sampleSd(values) {
+  if (values.length < 2) return null;
+  const mean = values.reduce((a, b) => a + b, 0) / values.length;
+  return Math.sqrt(values.reduce((a, v) => a + (v - mean) ** 2, 0) / (values.length - 1));
+}
+
+/** Linear interpolation between the sorted values – same as quantile() in webpage/app.py and docs/app.js. */
+function quantile(values, p) {
+  if (!values.length) return null;
+  const v = values.slice().sort((a, b) => a - b);
+  const pos = (v.length - 1) * p, i = Math.floor(pos);
+  return v[i] + (v[Math.min(i + 1, v.length - 1)] - v[i]) * (pos - i);
 }
 
 function getSheet(spreadsheet, name, columns) {

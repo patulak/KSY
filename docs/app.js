@@ -405,6 +405,7 @@ function renderTrial() {
     // Advance right away, so a reload never repeats an answered trial.
     state.index += 1;
     state.correct += isCorrect;
+    state.rts = [...(state.rts || []), rt];   // for the comparison on the end screen
     saveState();
 
     if (!state.test) { render(); return; }
@@ -427,11 +428,171 @@ function renderTrial() {
 
 function renderEnd() {
   const tx = t();
+  if (!state.finished_at) { state.finished_at = Date.now(); saveState(); }
   app().innerHTML = `
     <h1>${esc(tx.done)}</h1>
-    <p>${esc(fmt(tx.summary, { correct: state.correct, total: state.index, seconds: Math.round((Date.now() - state.started_at) / 1000) }))}</p>
-    <p class="muted" id="save-status"></p>`;
+    <p>${esc(fmt(tx.summary, { correct: state.correct, total: state.index, seconds: Math.round((state.finished_at - state.started_at) / 1000) }))}</p>
+    <p class="muted" id="save-status"></p>
+    <section class="compare" id="compare" hidden></section>`;
   updateSaveStatus();
+  loadComparison();
+}
+
+// ---------- Comparison with other participants (end screen) ----------
+
+/** Linear interpolation between the sorted values – same as quantile() in webpage/app.py and the Apps Script. */
+function quantile(values, p) {
+  if (!values.length) return null;
+  const v = [...values].sort((a, b) => a - b);
+  const pos = (v.length - 1) * p, i = Math.floor(pos);
+  return v[i] + (v[Math.min(i + 1, v.length - 1)] - v[i]) * (pos - i);
+}
+const median = (values) => quantile(values, 0.5);
+
+/** Sample standard deviation (n - 1) – same as sample_sd() in webpage/app.py and the Apps Script. */
+function sampleSd(values) {
+  if (values.length < 2) return null;
+  const mean = values.reduce((a, b) => a + b, 0) / values.length;
+  return Math.sqrt(values.reduce((a, v) => a + (v - mean) ** 2, 0) / (values.length - 1));
+}
+
+/** Anonymous summaries of the others from the Apps Script, then compareWith() + renderCompare(). */
+async function loadComparison() {
+  const box = document.getElementById("compare");
+  if (!CONFIG.SHEETS_URL || !box) return;
+  box.hidden = false;
+  box.innerHTML = `<h2>${esc(t().compare_title)}</h2><p class="muted">${esc(t().compare_loading)}</p>`;
+  try {
+    const s = DATA.settings;
+    const url = `${CONFIG.SHEETS_URL}?stats=1&sheet=${state.test ? "test" : "results"}` +
+      `&exclude=${state.participant}&min=${s.compare_min_answers}`;
+    const result = await fetch(url).then((r) => r.json());
+    if (!result.ok || !Array.isArray(result.participants)) throw new Error(result.error || "no stats");
+    const rts = (state.rts || []).filter((rt) => rt > 0 && rt <= s.rt_limit_ms);
+    const own = [state.index ? state.correct / state.index : 0, rts];
+    if (document.getElementById("compare") === box) renderCompare(box, compareWith(own, result.participants));
+  } catch (error) {
+    console.warn("Comparison not available:", error);
+    box.hidden = true;   // e.g. an older Apps Script without ?stats – just leave it out
+  }
+}
+
+/**
+ * Same logic as compare_with() in webpage/app.py. own = [accuracy 0–1, own RTs in ms];
+ * others = [accuracy, median RT or null, standard deviation of RTs or null] per participant.
+ */
+function compareWith([acc, ownRts], others) {
+  if (others.length < DATA.settings.compare_min_others) return { few: true };
+  const rt = median(ownRts);
+  const sd = sampleSd(ownRts);
+  const num = (x, digits = 2) => (state.lang === "en" ? x.toFixed(digits) : x.toFixed(digits).replace(".", ","));
+  const share = (better, ties, n) => Math.round((100 * (better + ties / 2)) / n);
+  const accs = others.map(([a]) => a);
+  const result = {
+    few: false, n: others.length,
+    acc: Math.round(100 * acc), avg: Math.round((100 * accs.reduce((x, y) => x + y, 0)) / accs.length),
+    pct: share(accs.filter((a) => a < acc).length, accs.filter((a) => a === acc).length, accs.length),
+    acc_chart: rankingChart(accs, acc, true, 0.05, (v) => `${Math.round(100 * v)} %`),
+  };
+  const rts = others.map(([, r]) => r).filter((r) => r !== null);
+  if (rt !== null && rts.length) {
+    Object.assign(result, {
+      rt: num(rt / 1000), rt_avg: num(median(rts) / 1000),
+      rt_pct: share(rts.filter((r) => r > rt).length, rts.filter((r) => r === rt).length, rts.length),
+      rt_chart: rankingChart(rts, rt, false, 100, (v) => `${num(v / 1000)} s`),
+    });
+  }
+  // Variability of the answer times: sample standard deviation (variance = sd²); smaller = more even.
+  const sds = others.map((o) => o[2]).filter((x) => x !== null && x !== undefined);
+  if (sd !== null) {
+    Object.assign(result, { sd: num(sd / 1000), var: num((sd / 1000) ** 2, 3) });
+    if (sds.length) {
+      Object.assign(result, {
+        sd_avg: num(median(sds) / 1000),
+        sd_pct: share(sds.filter((x) => x > sd).length, sds.filter((x) => x === sd).length, sds.length),
+      });
+    }
+  }
+  return result;
+}
+
+const RANKING_BARS = 20;   // with more participants than this, each bar stands for an equal share (5 %) of them
+
+/**
+ * Everyone (others + you) as bars, worst on the left, best on the right – same as ranking_chart() in app.py.
+ * x = rank (like a percentile chart, so it stays readable when nearly everyone has 90–100 %),
+ * bar height = the value on an axis from just below the worst to the best value, rounded to `step`
+ * (accuracy: 5 %, RT: 100 ms; for RT the axis is upside down, so faster = taller).
+ */
+function rankingChart(others, own, higherIsBetter, step, label) {
+  const worse = (a, b) => (higherIsBetter ? a < b : a > b);
+  const order = [...others].sort((a, b) => (higherIsBetter ? a - b : b - a));   // worst -> best
+  const below = order.filter((v) => worse(v, own));
+  const equal = order.filter((v) => v === own);
+  const above = order.filter((v) => worse(own, v));
+  const half = Math.floor(equal.length / 2);                                    // you go in the middle of your equals
+  let ranked = [...below, ...equal.slice(0, half)].map((v) => [v, false])
+    .concat([[own, true]], [...equal.slice(half), ...above].map((v) => [v, false]));
+  const total = ranked.length;
+  if (total > RANKING_BARS) {   // one bar per 5 % of the participants: the value in the middle of that slice
+    const youBar = Math.min(RANKING_BARS - 1, Math.floor(((below.length + half) * RANKING_BARS) / total));
+    ranked = Array.from({ length: RANKING_BARS }, (_, i) => (i === youBar
+      ? [own, true] : [ranked[Math.min(total - 1, Math.floor(((i + 0.5) * total) / RANKING_BARS))][0], false]));
+  }
+
+  const values = [own, ...others];
+  const worst = higherIsBetter ? Math.min(...values) : Math.max(...values);
+  const best = higherIsBetter ? Math.max(...values) : Math.min(...values);
+  let bottom, top;
+  if (higherIsBetter) {   // bottom of the axis one step below the worst value, so the worst bar is still visible
+    bottom = Math.max(0, Math.floor(worst / step - 1e-9) * step);
+    top = Math.ceil(best / step - 1e-9) * step;
+    if (step < 1) top = Math.min(1, top);
+  } else {
+    bottom = Math.ceil(worst / step + 1e-9) * step;
+    top = Math.max(0, Math.floor(best / step) * step);
+  }
+  if (top === bottom) top = bottom + (higherIsBetter ? step : -step);
+  const height = (v) => Math.max(2, Math.min(100, Math.round((100 * (v - bottom)) / (top - bottom))));
+  return {
+    bars: ranked.map(([v, you]) => ({ h: height(v), you, title: label(v) })),
+    ticks: [label(top), label((top + bottom) / 2), label(bottom)],
+    rank: above.length + 1, total,
+  };
+}
+
+/** Same markup as the ranking() macro in webpage/templates/compare.html. */
+function rankingHtml(chart, caption) {
+  const tx = t();
+  return `
+    <figure class="ranking">
+      <div class="plot">
+        <div class="y">${chart.ticks.map((tick) => `<span>${esc(tick)}</span>`).join("")}</div>
+        <div class="bars">${chart.bars.map((b) => `<div class="bar${b.you ? " you" : ""}" style="--h: ${b.h}%" title="${esc(b.title)}"></div>`).join("")}</div>
+        <span></span>
+        <div class="x"><span>${esc(fmt(tx.compare_place, { n: chart.total }))}</span><span>${esc(tx.compare_rank)} →</span><span>${esc(fmt(tx.compare_place, { n: 1 }))}</span></div>
+      </div>
+      <figcaption>${esc(fmt(caption, { rank: chart.rank, total: chart.total }))}</figcaption>
+    </figure>`;
+}
+
+/** Same markup as webpage/templates/compare.html. */
+function renderCompare(box, c) {
+  const tx = t();
+  if (c.few) {
+    box.innerHTML = `<h2>${esc(tx.compare_title)}</h2><p class="muted">${esc(tx.compare_few)}</p>`;
+    return;
+  }
+  box.innerHTML = `
+    <h2>${esc(tx.compare_title)}</h2>
+    <p>${fmt(tx.compare_accuracy, { acc: c.acc, pct: c.pct, avg: c.avg })}</p>
+    ${rankingHtml(c.acc_chart, tx.compare_chart_acc)}
+    ${c.rt ? `<p>${fmt(tx.compare_rt, { rt: c.rt, pct: c.rt_pct, avg: c.rt_avg })}</p>
+    ${rankingHtml(c.rt_chart, tx.compare_chart_rt)}` : ""}
+    ${c.sd ? `<p>${c.sd_avg
+    ? fmt(tx.compare_sd, { sd: c.sd, var: c.var, pct: c.sd_pct, avg: c.sd_avg })
+    : fmt(tx.compare_sd_own, { sd: c.sd, var: c.var })}</p>` : ""}
+    <p class="muted">${esc(fmt(tx.compare_n, { n: c.n }))}</p>`;
 }
 
 // ---------- Start ----------

@@ -120,6 +120,8 @@ Hand-written files: `docs/index.html`, `docs/app.js` (flow, timing, saving), `do
 3. Put the Web app URL (ends with `/exec`) into `SHEETS_URL` in `docs/config.js`.
    Opening the URL in a browser should show `{"ok":true,...}`.
 4. After changing the script: *Manage deployments → edit → New version* (the URL stays the same).
+   The end-screen comparison needs the current script version: until it is redeployed, the comparison
+   box is simply left out. `<URL>?stats=1` should return `{"ok":true,"participants":[...]}`.
 
 Results: sheets `results` and `test`; *File → Download → CSV* for analysis. The endpoint is public, so
 anyone could post rows – it only accepts well-formed rows, and junk can be filtered out in analysis.
