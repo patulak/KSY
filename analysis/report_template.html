@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Occlusion Experiment Results</title>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --text: #0b0b0b; --text-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --band: rgba(42,120,214,0.12); --scrim: rgba(0,0,0,0.55);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --text: #f0efec; --text-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --band: rgba(57,135,229,0.18); --scrim: rgba(0,0,0,0.7);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --text: #f0efec; --text-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --band: rgba(57,135,229,0.18); --scrim: rgba(0,0,0,0.7);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 26px; margin: 0 0 4px; }
+h2 { font-size: 19px; margin: 0 0 4px; }
+.sub { color: var(--text-2); margin: 0 0 24px; }
+section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px; margin: 0 0 20px; }
+.finding { color: var(--text-2); margin: 0 0 12px; max-width: 80ch; }
+.finding b { color: var(--text); }
+.note { color: var(--muted); font-size: 13px; margin: 8px 0 0; max-width: 95ch; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.tile .v { font-size: 28px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tile .l { color: var(--text-2); font-size: 13px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .row, .row3, .grid4 { grid-template-columns: 1fr; } }
+.chart { width: 100%; height: 300px; }
+.chart.tall { height: 560px; }
+.chart.mid { height: 460px; }
+.hint { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.panel h3 { font-size: 15px; margin: 0 0 2px; text-transform: capitalize; }
+.panel .meta { color: var(--text-2); font-size: 13px; margin: 0 0 6px; }
+.thumbs { display: flex; gap: 6px; margin: 4px 0 6px; }
+.thumbs figure { margin: 0; flex: 1; }
+.crop { overflow: hidden; aspect-ratio: 16/7; border-radius: 6px; border: 1px solid var(--border); cursor: zoom-in; }
+.crop img { display: block; width: 100%; transform: scale(3.2); transform-origin: 57% 33%; }
+.thumbs figcaption { font-size: 12px; color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); }
+th { color: var(--text-2); font-weight: 600; }
+td.num, th.num { text-align: right; }
+.scroll { overflow-x: auto; }
+details { margin-top: 10px; }
+summary { cursor: pointer; color: var(--text-2); font-size: 14px; }
+/* clickable image names on chart axes */
+.js-plotly-plot .ytick text.img-link { cursor: pointer; pointer-events: all; text-decoration: underline; text-decoration-color: var(--axis); }
+.js-plotly-plot .ytick text.img-link:hover { fill: var(--s1) !important; }
+/* gallery */
+.gallery-filter { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+.chip { border: 1px solid var(--border); background: transparent; color: var(--text-2); border-radius: 999px;
+  padding: 4px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--s1); border-color: var(--s1); color: #fff; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: transparent; color: inherit;
+  text-align: left; font: inherit; padding: 0; cursor: zoom-in; }
+.card:hover { border-color: var(--s1); }
+.card .crop { border: 0; border-radius: 0; }
+.card .cap { padding: 6px 8px; font-size: 13px; }
+.card .cap b { display: block; font-weight: 600; }
+.card .cap span { color: var(--text-2); font-variant-numeric: tabular-nums; }
+/* image viewer */
+#viewer { border: 1px solid var(--border); border-radius: 12px; padding: 0; background: var(--surface); color: var(--text);
+  width: min(1200px, 96vw); max-height: 94vh; }
+#viewer::backdrop { background: var(--scrim); }
+.v-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.v-head h3 { margin: 0; font-size: 16px; }
+.v-body { padding: 12px 14px; }
+.v-stage { overflow: hidden; border-radius: 8px; background: #000; }
+.v-stage img { display: block; width: 100%; transition: transform .15s; }
+.v-stage.zoom2 img { transform: scale(2); }
+.v-stage.gray img { filter: grayscale(1); }
+.v-stats { color: var(--text-2); font-size: 14px; margin: 10px 0 6px; }
+.v-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { border: 1px solid var(--border); background: transparent; color: var(--text); border-radius: 8px; padding: 6px 12px;
+  font: inherit; font-size: 14px; cursor: pointer; text-decoration: none; }
+.btn:hover { border-color: var(--s1); }
+.btn[aria-pressed="true"] { background: var(--s1); border-color: var(--s1); color: #fff; }
+.v-path { font: 12px ui-monospace, Consolas, monospace; color: var(--muted); word-break: break-all; margin-top: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Occlusion experiment: human results</h1>
+  <p class="sub" id="sub"></p>
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2>Participants</h2>
+    <p class="finding" id="f-demo"></p>
+    <div class="row3">
+      <div><div class="chart" id="c-age"></div></div>
+      <div><div class="chart" id="c-device"></div></div>
+      <div><div class="chart" id="c-lang"></div></div>
+    </div>
+    <details><summary>Per-participant table</summary><div class="scroll" id="t-part"></div></details>
+  </section>
+
+  <section>
+    <h2>Accuracy per image</h2>
+    <p class="finding" id="f-img"></p>
+    <p class="hint">Click an image name or a point to see the image.</p>
+    <div class="row">
+      <div><div class="chart tall" id="c-img-acc"></div></div>
+      <div><div class="chart tall" id="c-img-rt"></div></div>
+    </div>
+    <p class="note">Fixed images only; the 40 writing-tool series images are in the last two sections. Lines are 95 % Wilson intervals. Wrong answers per image are in the hover.</p>
+  </section>
+
+  <section>
+    <h2>Occlusion and key part</h2>
+    <p class="finding" id="f-occ"></p>
+    <div class="row3">
+      <div><div class="chart" id="c-occ"></div></div>
+      <div><div class="chart" id="c-key"></div></div>
+      <div><div class="chart" id="c-key-rt"></div></div>
+    </div>
+    <div class="scroll" id="t-occ"></div>
+    <p class="note">The occlusion number comes from the image filename. In the renders it looks like the <b>visible</b> share of the object rather than the covered share (rake_5 and whisk_5 show almost nothing), so read the x-axis with that in mind. The regression is a plain logistic model with no participant or object effects; with this few errors treat it as descriptive.</p>
+  </section>
+
+  <section id="s-device"></section>
+  <section id="s-zoom"></section>
+  <section id="s-mode"></section>
+
+  <section>
+    <h2>Does performance change during the test?</h2>
+    <p class="finding" id="f-learn"></p>
+    <div class="row">
+      <div><div class="chart" id="c-learn-acc"></div></div>
+      <div><div class="chart" id="c-learn-rt"></div></div>
+    </div>
+    <p class="note">Trials grouped by position (1–7, 8–14, …). Participants who did the first, smaller version of the test only reach trial 21, so the later bins contain fewer people (see hover).</p>
+  </section>
+
+  <section>
+    <h2>Reaction time in detail</h2>
+    <p class="finding" id="f-rt"></p>
+    <div class="chart mid" id="c-rel"></div>
+    <p class="note">Relative RT = each trial's time divided by that person's own median time, so 100 % is "their normal speed". This removes the difference between fast and slow people, which is larger than most effects here. Lines are 95 % bootstrap intervals of the median.</p>
+    <div class="row" style="margin-top:16px">
+      <div><div class="chart" id="c-hist"></div></div>
+      <div><div class="chart" id="c-people"></div></div>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <div><div class="chart" id="c-sa"></div></div>
+      <div><div class="chart" id="c-occ-rt"></div></div>
+    </div>
+    <p class="note" id="n-rt"></p>
+  </section>
+
+  <section>
+    <h2>Writing tools: how much of the object has to be visible?</h2>
+    <p class="finding" id="f-series"></p>
+    <p class="hint">Click a thumbnail or a point to see the image.</p>
+    <div class="grid4" id="series-panels"></div>
+    <p class="note" id="n-series"></p>
+  </section>
+
+  <section>
+    <h2>All images</h2>
+    <p class="finding">Every image in the experiment with its accuracy and median reaction time. Click one to open it.</p>
+    <div class="gallery-filter" id="gallery-filter"></div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+</main>
+
+<dialog id="viewer" aria-labelledby="v-title">
+  <div class="v-head"><h3 id="v-title"></h3><button class="btn" id="v-close" aria-label="Close">Close ✕</button></div>
+  <div class="v-body">
+    <div class="v-stage" id="v-stage"><img id="v-img" alt=""></div>
+    <div class="v-stats" id="v-stats"></div>
+    <div class="v-actions">
+      <button class="btn" id="v-gray" aria-pressed="false">Grayscale (as in the test)</button>
+      <button class="btn" id="v-zoom" aria-pressed="false">2× zoom (as in the test)</button>
+      <a class="btn" id="v-open" target="_blank" rel="noopener">Open in new window</a>
+      <a class="btn" id="v-png" target="_blank" rel="noopener">Open full-resolution PNG</a>
+      <button class="btn" id="v-copy">Copy file path</button>
+      <button class="btn" id="v-prev" aria-label="Previous image">←</button>
+      <button class="btn" id="v-next" aria-label="Next image">→</button>
+    </div>
+    <div class="v-path" id="v-path"></div>
+  </div>
+</dialog>
+
+<script>
+const D = /*__DATA__*/null;
+const pct = (v, d = 0) => v == null ? "–" : (100 * v).toFixed(d) + " %";
+const ms = v => v == null ? "–" : Math.round(v) + " ms";
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const charts = [];   // [el, () => {traces, layout}] for re-render on theme change
+const IMG = Object.fromEntries(D.images.map(i => [i.image, i]));
+const label = id => id.replace("book_", "");
+
+// ---------- shared axes: every median-RT chart uses the same scale
+const rtRows = [D.key.rows, D.device.rows, D.zoom.rows, D.mode.rows, D.learning.rows].flat();
+const RT_MAX = Math.ceil(Math.max(...rtRows.map(r => r.rt_q3 || 0), ...D.images.map(i => i.rt || 0)) / 250) * 250;
+const RT_RANGE = [0, RT_MAX];
+const PEOPLE_MAX = Math.ceil(Math.max(...D.rt.people.map(p => p.rt_q3)) / 250) * 250;
+const SERIES_MAX = Math.max(RT_MAX, Math.ceil(Math.max(...D.series.objects.flatMap(o => o.trials.map(t => t.rt))) / 250) * 250);
+
+function base(extra = {}) {
+  const font = { family: 'system-ui, -apple-system, "Segoe UI", sans-serif', color: css("--text-2"), size: 12 };
+  const ax = { gridcolor: css("--grid"), linecolor: css("--axis"), zerolinecolor: css("--axis"), fixedrange: true,
+               tickfont: { color: css("--muted") }, title: { font: { color: css("--text-2"), size: 12 } }, automargin: true };
+  const l = { paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)", font, dragmode: false,
+              margin: { l: 10, r: 10, t: 36, b: 10 }, showlegend: false,
+              hoverlabel: { bgcolor: css("--surface"), bordercolor: css("--axis"), font: { color: css("--text") } },
+              title: { font: { size: 14, color: css("--text") }, x: 0, xanchor: "left" },
+              legend: { orientation: "h", y: 1.1, x: 0, font: { color: css("--text-2") } },
+              xaxis: { ...ax }, yaxis: { ...ax } };
+  for (const [k, v] of Object.entries(extra)) {
+    l[k] = (typeof v === "object" && v !== null && !Array.isArray(v) && l[k]) ? { ...l[k], ...v } : v;
+  }
+  return l;
+}
+// draw(id, fn, {imageTicks}) - points whose trace has `imgs` open the image viewer on click;
+// imageTicks: y-axis tick labels are image names (without "book_") and become clickable too
+function draw(id, fn, opt = {}) {
+  const el = document.getElementById(id);
+  charts.push([el, fn]);
+  const { traces, layout } = fn();
+  Plotly.newPlot(el, traces, layout, { displayModeBar: false, responsive: true });
+  el.on("plotly_click", ev => {
+    const pt = ev.points && ev.points[0];
+    const id = pt && pt.data.imgs && pt.data.imgs[pt.pointIndex];
+    if (id) openViewer(id, pt.data.imgs);
+  });
+  if (opt.imageTicks) {
+    const hook = () => el.querySelectorAll(".ytick text").forEach(t => {
+      const id = "book_" + t.textContent;
+      if (!IMG[id]) return;
+      t.classList.add("img-link");
+      t.onclick = () => openViewer(id, opt.imageTicks());
+    });
+    el.on("plotly_afterplot", hook);
+    hook();
+  }
+}
+function redrawAll() {
+  for (const [el, fn] of charts) { const { traces, layout } = fn(); Plotly.react(el, traces, layout); }
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redrawAll);
+
+function countBars(id, rows, title) {
+  draw(id, () => ({
+    traces: [{ type: "bar", x: rows.map(r => r.level), y: rows.map(r => r.count),
+      marker: { color: css("--s1"), cornerradius: 4 }, text: rows.map(r => r.count), textposition: "outside",
+      textfont: { color: css("--text-2") }, cliponaxis: false,
+      hovertemplate: "%{x}: %{y} participants<extra></extra>" }],
+    layout: base({ title: { text: title }, yaxis: { title: { text: "participants" }, rangemode: "tozero", dtick: 1 },
+                   xaxis: { type: "category" }, bargap: 0.45 })
+  }));
+}
+function accDots(id, rows, title) {
+  draw(id, () => {
+    const lo = Math.min(...rows.map(r => r.lo)), yMin = Math.max(0, Math.floor((lo - 0.05) * 10) / 10);
+    return {
+      traces: [{ type: "scatter", mode: "markers", x: rows.map(r => r.level), y: rows.map(r => r.acc),
+        error_y: { type: "data", symmetric: false, array: rows.map(r => r.hi - r.acc), arrayminus: rows.map(r => r.acc - r.lo),
+                   color: css("--s1"), thickness: 2, width: 0 },
+        marker: { color: css("--s1"), size: 11, line: { color: css("--surface"), width: 2 } },
+        customdata: rows.map(r => [r.correct, r.n, r.participants, pct(r.lo), pct(r.hi)]),
+        hovertemplate: "<b>%{x}</b><br>accuracy %{y:.1%} (%{customdata[0]}/%{customdata[1]})<br>95 % CI %{customdata[3]} – %{customdata[4]}<br>%{customdata[2]} participants<extra></extra>" }],
+      layout: base({ title: { text: title }, xaxis: { type: "category", range: [-0.6, rows.length - 0.4] },
+        yaxis: { tickformat: ".0%", range: [yMin, 1.02], title: { text: "accuracy" } } })
+    };
+  });
+}
+// median RT bars with IQR whiskers, always on the shared RT axis
+function rtBars(id, rows, title) {
+  draw(id, () => ({
+    traces: [{ type: "bar", x: rows.map(r => r.level), y: rows.map(r => r.rt),
+      marker: { color: css("--s1"), cornerradius: 4 },
+      error_y: { type: "data", symmetric: false, array: rows.map(r => r.rt_q3 - r.rt), arrayminus: rows.map(r => r.rt - r.rt_q1),
+                 color: css("--text-2"), thickness: 1.5, width: 6 },
+      customdata: rows.map(r => [Math.round(r.rt_q1), Math.round(r.rt_q3), r.n, pct(r.rel)]),
+      hovertemplate: "<b>%{x}</b><br>median %{y:.0f} ms (IQR %{customdata[0]}–%{customdata[1]})<br>relative to own speed: %{customdata[3]}<br>%{customdata[2]} trials<extra></extra>" }],
+    layout: base({ title: { text: title }, xaxis: { type: "category" }, bargap: 0.45,
+      yaxis: { title: { text: "median reaction time (ms)" }, range: RT_RANGE } })
+  }));
+}
+
+function comparisonSection(sectionId, c, finding, accKey, rtKey) {
+  const s = document.getElementById(sectionId);
+  s.innerHTML = `<h2>${c.title}</h2><p class="finding">${finding}</p>
+    <div class="row"><div><div class="chart" id="${sectionId}-a"></div></div><div><div class="chart" id="${sectionId}-r"></div></div></div>
+    <p class="note">Accuracy: ${c.tests.acc_test}, ${D.fmt[accKey]}. Reaction time: ${c.tests.rt_test}, ${D.fmt[rtKey]}.
+    Bars = median, whiskers = middle 50 % of trials. ${c.note || ""}</p>`;
+  const rows = c.rows.map(r => ({ ...r, level: `${r.level} (n=${r.n})` }));
+  accDots(`${sectionId}-a`, rows, "Accuracy");
+  rtBars(`${sectionId}-r`, rows, "Reaction time");
+}
+function diffSentence(c) {
+  const [a, b] = c.rows;
+  if (!a || !b) return "Only one level in the data so far.";
+  const better = a.acc >= b.acc ? a : b, worse = better === a ? b : a;
+  const faster = a.rel <= b.rel ? a : b, slower = faster === a ? b : a;
+  return `<b>${better.level}</b> ${pct(better.acc, 1)} vs <b>${worse.level}</b> ${pct(worse.acc, 1)} correct. ` +
+    `Median time ${ms(faster.rt)} for ${faster.level} vs ${ms(slower.rt)} for ${slower.level}; relative to each person's own speed ${pct(faster.rel)} vs ${pct(slower.rel)}.`;
+}
+
+// ----------------------------------------------------------- image viewer
+const V = { el: document.getElementById("viewer"), list: [], i: 0 };
+function openViewer(id, list) {
+  V.list = list && list.includes(id) ? list : D.images.map(i => i.image);
+  V.i = V.list.indexOf(id);
+  showImage();
+  if (!V.el.open) V.el.showModal();
+}
+function showImage() {
+  const im = IMG[V.list[V.i]];
+  document.getElementById("v-title").textContent = `${label(im.image)}  (${V.i + 1} / ${V.list.length})`;
+  const img = document.getElementById("v-img");
+  img.src = im.webp; img.alt = label(im.image);
+  const facts = [`${pct(im.acc)} correct (${im.correct}/${im.n})`, `median RT ${ms(im.rt)}`, `${pct(im.rel)} of own speed`];
+  if (im.occlusion != null) facts.push(`occlusion number ${im.occlusion}`);
+  if (im.key != null) facts.push(im.key > 0 ? "key part visible" : "key part hidden");
+  if (im.visible_mm != null) facts.push(`≈ ${Math.round(im.visible_mm)} mm visible`);
+  if (im.wrong) facts.push(`wrong answers: ${im.wrong}`);
+  document.getElementById("v-stats").textContent = facts.join(" · ");
+  document.getElementById("v-open").href = im.webp;
+  const png = document.getElementById("v-png");
+  png.hidden = !im.png;
+  if (im.png) png.href = "file:///" + im.png.replace(/\\/g, "/");
+  document.getElementById("v-path").textContent = im.png || im.webp;
+  document.getElementById("v-copy").textContent = "Copy file path";
+  document.getElementById("v-prev").disabled = V.list.length < 2;
+  document.getElementById("v-next").disabled = V.list.length < 2;
+}
+function step(d) { V.i = (V.i + d + V.list.length) % V.list.length; showImage(); }
+document.getElementById("v-close").onclick = () => V.el.close();
+V.el.addEventListener("click", e => { if (e.target === V.el) V.el.close(); });
+V.el.addEventListener("keydown", e => { if (e.key === "ArrowLeft") step(-1); if (e.key === "ArrowRight") step(1); });
+document.getElementById("v-prev").onclick = () => step(-1);
+document.getElementById("v-next").onclick = () => step(1);
+for (const [btn, cls] of [["v-gray", "gray"], ["v-zoom", "zoom2"]]) {
+  document.getElementById(btn).onclick = e => {
+    const on = document.getElementById("v-stage").classList.toggle(cls);
+    e.currentTarget.setAttribute("aria-pressed", on);
+  };
+}
+document.getElementById("v-copy").onclick = async e => {
+  const text = document.getElementById("v-path").textContent;
+  try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied ✓"; }
+  catch { getSelection().selectAllChildren(document.getElementById("v-path")); e.target.textContent = "Press Ctrl+C"; }
+};
+
+// ----------------------------------------------------------- overview
+const O = D.overview;
+document.getElementById("sub").textContent =
+  `${O.participants} participants, ${O.trials} answered trials, ${O.first} to ${O.last}. Chance level is ${pct(O.chance)} (4 options).`;
+document.getElementById("tiles").innerHTML = [
+  [O.participants, "participants"], [O.trials, "answered trials"], [pct(O.accuracy, 1), "overall accuracy"],
+  [ms(O.median_rt), "median reaction time"]].map(([v, l]) => `<div class="tile"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+
+// ----------------------------------------------------------- demographics
+countBars("c-age", D.ages, "Age group");
+countBars("c-device", D.devices.filter(r => r.count > 0), "Device");
+countBars("c-lang", D.languages.map(r => ({ ...r, level: r.level === "cs" ? "Czech" : "English" })), "Language");
+const ages = D.ages.filter(r => r.count).map(r => `${r.count}× ${r.level}`).join(", ");
+const devs = D.devices.filter(r => r.count).map(r => `${r.count}× ${r.level}`).join(", ");
+document.getElementById("f-demo").innerHTML = `Age: <b>${ages}</b>. Device: <b>${devs}</b>.` +
+  (D.ages.filter(r => r.count).length < 2 ? " Only one age group so far, so age can't be compared yet." : "");
+document.getElementById("t-part").innerHTML = `<table><tr><th>participant</th><th>age</th><th>device</th><th>screen</th><th class="num">trials</th><th class="num">accuracy</th><th class="num">median RT</th></tr>` +
+  D.participants.map(p => `<tr><td>${p.id}</td><td>${p.age}</td><td>${p.device}</td><td>${p.screen}</td><td class="num">${p.n}</td><td class="num">${pct(p.acc, 1)}</td><td class="num">${ms(p.rt)}</td></tr>`).join("") + `</table>`;
+
+// ----------------------------------------------------------- per image
+const fixed = D.images.filter(i => !i.series).sort((a, b) => a.acc - b.acc || b.rt - a.rt);
+const fixedIds = () => [...fixed].reverse().map(i => i.image);   // top-to-bottom order of the chart
+const KEY_GROUPS = [["key part visible", i => i.key > 0, "--s1"], ["key part hidden", i => i.key === 0, "--s2"]];
+function imgChart(id, isAcc) {
+  draw(id, () => {
+    const traces = KEY_GROUPS.map(([name, f, c]) => {
+      const rows = fixed.filter(f);
+      const t = { name, y: rows.map(i => label(i.image)), imgs: rows.map(i => i.image),
+        customdata: rows.map(i => [i.correct, i.n, ms(i.rt), i.wrong || "none", pct(i.lo), pct(i.hi), pct(i.rel)]) };
+      if (isAcc) Object.assign(t, { type: "scatter", mode: "markers", x: rows.map(i => i.acc),
+          error_x: { type: "data", symmetric: false, array: rows.map(i => i.hi - i.acc), arrayminus: rows.map(i => i.acc - i.lo), color: css(c), thickness: 1.5, width: 0 },
+          marker: { color: css(c), size: 10, line: { color: css("--surface"), width: 2 } },
+          hovertemplate: "<b>%{y}</b><br>%{x:.0%} (%{customdata[0]}/%{customdata[1]}), CI %{customdata[4]}–%{customdata[5]}<br>median RT %{customdata[2]}<br>wrong answers: %{customdata[3]}<br><i>click to view</i><extra></extra>" });
+      else Object.assign(t, { type: "bar", orientation: "h", x: rows.map(i => i.rt), marker: { color: css(c), cornerradius: 4 },
+          hovertemplate: "<b>%{y}</b><br>median %{x:.0f} ms (%{customdata[6]} of own speed)<br>%{customdata[1]} trials<br><i>click to view</i><extra></extra>" });
+      return t;
+    });
+    return { traces, layout: base({
+      title: { text: isAcc ? "Accuracy" : "Median reaction time" }, showlegend: true,
+      legend: { y: 1.06 }, margin: { l: 10, r: 10, t: 60, b: 10 },
+      yaxis: { type: "category", categoryorder: "array", categoryarray: fixed.map(i => label(i.image)), gridcolor: "rgba(0,0,0,0)" },
+      xaxis: isAcc ? { tickformat: ".0%", range: [0, 1.04], title: { text: "accuracy" } } : { title: { text: "ms" }, range: RT_RANGE },
+      bargap: 0.35 }) };
+  }, { imageTicks: fixedIds });
+}
+imgChart("c-img-acc", true);
+imgChart("c-img-rt", false);
+const hardest = fixed.filter(i => i.acc < 1).sort((a, b) => a.acc - b.acc);
+document.getElementById("f-img").innerHTML = `${fixed.length - hardest.length} of ${fixed.length} fixed images were always answered correctly. The errors concentrate on ` +
+  hardest.slice(0, 4).map(i => `<b>${label(i.image)}</b> (${pct(i.acc)}, ${i.wrong})`).join(", ") + ".";
+
+// ----------------------------------------------------------- occlusion & key
+function occScatter(id, yKey, title, yAxis) {
+  draw(id, () => ({
+    traces: KEY_GROUPS.map(([name, f, c]) => {
+      const rows = fixed.filter(f);
+      return { type: "scatter", mode: "markers", name, x: rows.map(i => i.occlusion), y: rows.map(i => i[yKey]), imgs: rows.map(i => i.image),
+        marker: { color: css(c), size: rows.map(i => 6 + i.n * 1.4), line: { color: css("--surface"), width: 2 } },
+        customdata: rows.map(i => [label(i.image), i.correct, i.n, ms(i.rt), pct(i.acc)]),
+        hovertemplate: "<b>%{customdata[0]}</b><br>occlusion number %{x}<br>%{customdata[4]} correct (%{customdata[1]}/%{customdata[2]}), median %{customdata[3]}<br><i>click to view</i><extra></extra>" };
+    }), layout: base({ title: { text: title }, showlegend: true, margin: { l: 10, r: 10, t: 64, b: 10 },
+      xaxis: { title: { text: "occlusion number from filename (%)" } }, yaxis: yAxis })
+  }));
+}
+occScatter("c-occ", "acc", "Accuracy vs occlusion number", { tickformat: ".0%", range: [0.4, 1.04], title: { text: "accuracy" } });
+accDots("c-key", D.key.rows.map(r => ({ ...r, level: `${r.level} (n=${r.n})` })), "Key part: accuracy");
+rtBars("c-key-rt", D.key.rows.map(r => ({ ...r, level: `${r.level} (n=${r.n})` })), "Key part: reaction time");
+const k = D.key.rows, m = D.occ_model;
+document.getElementById("f-occ").innerHTML = `With the key part visible, <b>${pct(k[0].acc, 1)}</b> correct; hidden, <b>${pct(k[1].acc, 1)}</b> (${D.key.tests.acc_test}, ${D.fmt.key_acc}). ` +
+  `With the key part hidden people are ${k[1].rel > k[0].rel ? "<b>slower</b>" : "not slower"}: median ${ms(k[0].rt)} vs ${ms(k[1].rt)}, ${pct(k[0].rel)} vs ${pct(k[1].rel)} of their own normal speed (${D.key.tests.rt_test}, <b>${D.fmt.key_rt}</b>). ` +
+  `Matched pairs (same object and occlusion): ` +
+  D.pairs.map(p => `${label(p.with)} ${pct(p.acc_with)} (n=${p.n_with}) vs no key ${pct(p.acc_without)} (n=${p.n_without})`).join("; ") + ".";
+document.getElementById("t-occ").innerHTML = `<table><tr><th>logistic model term</th><th class="num">coefficient</th><th class="num">odds ratio</th><th class="num">p</th></tr>` +
+  m.map(r => `<tr><td>${r.term}</td><td class="num">${r.coef.toFixed(2)}</td><td class="num">${r.or.toFixed(2)}</td><td class="num">${r.p < 0.001 ? "< 0.001" : r.p.toFixed(3)}</td></tr>`).join("") + `</table>`;
+
+// ----------------------------------------------------------- device / zoom / mode
+comparisonSection("s-device", D.device, diffSentence(D.device), "dev_acc", "dev_rt");
+comparisonSection("s-zoom", D.zoom, diffSentence(D.zoom), "zoom_acc", "zoom_rt");
+comparisonSection("s-mode", D.mode, diffSentence(D.mode), "mode_acc", "mode_rt");
+
+// ----------------------------------------------------------- learning
+const L = D.learning;
+draw("c-learn-acc", () => ({
+  traces: [{ type: "scatter", mode: "lines+markers", x: L.rows.map(r => r.level), y: L.rows.map(r => r.acc),
+    line: { color: css("--s1"), width: 2 }, marker: { color: css("--s1"), size: 9, line: { color: css("--surface"), width: 2 } },
+    error_y: { type: "data", symmetric: false, array: L.rows.map(r => r.hi - r.acc), arrayminus: L.rows.map(r => r.acc - r.lo), color: css("--s1"), thickness: 1.5, width: 0 },
+    customdata: L.rows.map(r => [r.n, r.participants]),
+    hovertemplate: "trials %{x}<br>%{y:.1%} correct<br>%{customdata[0]} trials, %{customdata[1]} participants<extra></extra>" }],
+  layout: base({ title: { text: "Accuracy by trial position" }, xaxis: { type: "category", title: { text: "trial number" } },
+    yaxis: { tickformat: ".0%", range: [0.5, 1.04], title: { text: "accuracy" } } })
+}));
+draw("c-learn-rt", () => ({
+  traces: [{ type: "scatter", mode: "lines", x: L.rows.map(r => r.level), y: L.rows.map(r => r.rt_q3), line: { width: 0 }, hoverinfo: "skip" },
+    { type: "scatter", mode: "lines", x: L.rows.map(r => r.level), y: L.rows.map(r => r.rt_q1), fill: "tonexty", fillcolor: css("--band"), line: { width: 0 }, hoverinfo: "skip" },
+    { type: "scatter", mode: "lines+markers", x: L.rows.map(r => r.level), y: L.rows.map(r => r.rt),
+    line: { color: css("--s1"), width: 2 }, marker: { color: css("--s1"), size: 9, line: { color: css("--surface"), width: 2 } },
+    customdata: L.rows.map(r => [Math.round(r.rt_q1), Math.round(r.rt_q3), r.participants, pct(r.rel)]),
+    hovertemplate: "trials %{x}<br>median %{y:.0f} ms (IQR %{customdata[0]}–%{customdata[1]})<br>%{customdata[3]} of own speed<br>%{customdata[2]} participants<extra></extra>" }],
+  layout: base({ title: { text: "Reaction time by trial position (band = middle 50 %)" }, xaxis: { type: "category", title: { text: "trial number" } },
+    yaxis: { range: RT_RANGE, title: { text: "ms" } } })
+}));
+document.getElementById("f-learn").innerHTML = `First half of each test <b>${pct(L.acc_first, 1)}</b> correct, second half <b>${pct(L.acc_second, 1)}</b> (${D.fmt.learn_acc}). ` +
+  `Reaction time ${L.rho_w < 0 ? "falls" : "rises"} slightly over the test: Spearman ρ = ${L.rho_w.toFixed(2)} (${D.fmt.learn_rho_w}) between trial number and RT relative to each person's own median. ` +
+  `<b>${L.early_errors} of ${L.errors}</b> errors happened in the first 3 trials, i.e. before people had got used to the 1-second exposure.`;
+
+// ----------------------------------------------------------- reaction time in detail
+const R = D.rt, conds = R.conditions;
+const condLabel = c => `${c.group}: ${c.level}`;
+draw("c-rel", () => {
+  const order = [...conds].reverse();
+  return {
+    traces: [{ type: "scatter", mode: "markers", y: order.map(condLabel), x: order.map(c => c.rel),
+      error_x: { type: "data", symmetric: false, array: order.map(c => c.rel_hi - c.rel), arrayminus: order.map(c => c.rel - c.rel_lo), color: css("--s1"), thickness: 2, width: 0 },
+      marker: { color: css("--s1"), size: 10, line: { color: css("--surface"), width: 2 } },
+      customdata: order.map(c => [pct(c.rel_lo), pct(c.rel_hi), ms(c.rt), c.n, c.participants]),
+      hovertemplate: "<b>%{y}</b><br>%{x:.0%} of own normal speed (95 % CI %{customdata[0]}–%{customdata[1]})<br>median %{customdata[2]}, %{customdata[3]} trials, %{customdata[4]} people<extra></extra>" }],
+    layout: base({ title: { text: "Relative reaction time by condition (100 % = person's own median; right = slower)" },
+      shapes: [{ type: "line", x0: 1, x1: 1, yref: "paper", y0: 0, y1: 1, line: { color: css("--muted"), width: 1, dash: "dot" } }],
+      xaxis: { tickformat: ".0%", title: { text: "relative reaction time (log scale)" }, type: "log",
+               range: [Math.log10(0.7), Math.log10(Math.max(2.2, ...conds.map(c => c.rel_hi || 0)) * 1.05)],
+               tickvals: [0.75, 1, 1.25, 1.5, 2, 3, 4] },
+      yaxis: { type: "category", gridcolor: "rgba(0,0,0,0)" } })
+  };
+});
+// distribution: 250 ms bins up to HIST_END, everything slower goes into one overflow bin
+const HIST_BIN = 250, HIST_END = 3000;
+draw("c-hist", () => {
+  const groups = [["correct", 1, "--s1"], ["wrong", 0, "--s2"]];
+  const nb = HIST_END / HIST_BIN;
+  const labels = [...Array(nb).keys()].map(i => `${i * HIST_BIN}–${(i + 1) * HIST_BIN}`).concat(`≥ ${HIST_END}`);
+  return { traces: groups.map(([name, v, c]) => {
+      const rts = R.trials.filter(t => t.correct === v).map(t => t.rt);
+      const counts = Array(nb + 1).fill(0);
+      rts.forEach(t => counts[Math.min(nb, Math.floor(t / HIST_BIN))]++);
+      return { type: "bar", name, x: labels, y: counts.map(k => k / rts.length), customdata: counts,
+        marker: { color: css(c), cornerradius: 3 },
+        hovertemplate: `${name}: %{y:.0%} of ${name} answers (%{customdata}) at %{x} ms<extra></extra>` };
+    }),
+    layout: base({ title: { text: "Reaction time distribution (share of each group)" }, showlegend: true, barmode: "group",
+      bargap: 0.2, bargroupgap: 0.1, margin: { l: 10, r: 10, t: 64, b: 10 },
+      xaxis: { type: "category", title: { text: "ms" }, tickangle: -45 }, yaxis: { tickformat: ".0%", rangemode: "tozero", title: { text: "share of answers" } } }) };
+});
+draw("c-people", () => {
+  const p = R.people;
+  return { traces: [{ type: "scatter", mode: "markers", y: p.map(x => `${x.id} (${x.device})`), x: p.map(x => x.rt),
+      error_x: { type: "data", symmetric: false, array: p.map(x => x.rt_q3 - x.rt), arrayminus: p.map(x => x.rt - x.rt_q1), color: css("--s1"), thickness: 2, width: 0 },
+      marker: { color: css("--s1"), size: 10, line: { color: css("--surface"), width: 2 } },
+      customdata: p.map(x => [Math.round(x.rt_q1), Math.round(x.rt_q3), x.n, pct(x.acc, 1)]),
+      hovertemplate: "<b>%{y}</b><br>median %{x:.0f} ms (IQR %{customdata[0]}–%{customdata[1]})<br>%{customdata[2]} trials, %{customdata[3]} correct<extra></extra>" }],
+    layout: base({ title: { text: PEOPLE_MAX > RT_MAX ? "Each participant's speed (median, middle 50 %; wider axis)" : "Each participant's speed (median, middle 50 %)" },
+      xaxis: { title: { text: "ms" }, range: [0, Math.max(RT_MAX, PEOPLE_MAX)] },
+      yaxis: { type: "category", gridcolor: "rgba(0,0,0,0)" } }) };
+});
+draw("c-sa", () => ({
+  traces: KEY_GROUPS.map(([name, f, c]) => {
+    const rows = D.images.filter(i => !i.series).filter(f);
+    return { type: "scatter", mode: "markers", name, x: rows.map(i => i.rt), y: rows.map(i => i.acc), imgs: rows.map(i => i.image),
+      marker: { color: css(c), size: rows.map(i => 6 + i.n * 1.4), line: { color: css("--surface"), width: 2 } },
+      customdata: rows.map(i => [label(i.image), i.correct, i.n]),
+      hovertemplate: "<b>%{customdata[0]}</b><br>median %{x:.0f} ms<br>%{y:.0%} correct (%{customdata[1]}/%{customdata[2]})<br><i>click to view</i><extra></extra>" };
+  }), layout: base({ title: { text: "Speed vs accuracy per image" }, showlegend: true, margin: { l: 10, r: 10, t: 64, b: 10 },
+    xaxis: { title: { text: "median reaction time (ms)" }, range: RT_RANGE }, yaxis: { tickformat: ".0%", range: [0.4, 1.04], title: { text: "accuracy" } } })
+}));
+occScatter("c-occ-rt", "rt", "Reaction time vs occlusion number", { range: RT_RANGE, title: { text: "median reaction time (ms)" } });
+const cg = (g, l) => conds.find(c => c.group === g && c.level === l) || {};
+const slowerOf = (g, a, b) => (cg(g, a).rel > cg(g, b).rel ? `${a} (${pct(cg(g, a).rel)} vs ${pct(cg(g, b).rel)})` : `${b} (${pct(cg(g, b).rel)} vs ${pct(cg(g, a).rel)})`);
+document.getElementById("f-rt").innerHTML =
+  `Reaction time picks up effects that accuracy is too close to 100 % to show. Wrong answers take <b>${pct(cg("Result", "wrong").rel)}</b> of a person's normal time (${D.fmt.result_rt}): wrong answers usually come after hesitating. ` +
+  `Slower side of each comparison: key part ${slowerOf("Key part", "hidden", "visible")}, zoom ${slowerOf("Zoom", "1×", "2×")}, answers ${slowerOf("Answer type", "text", "image")}, ` +
+  `test position first third ${pct(cg("Test position", "first third").rel)} vs last third ${pct(cg("Test position", "last third").rel)}. ` +
+  `Across images, slower images are also less accurate (Spearman ρ = ${R.sa_rho.toFixed(2)}, ${D.fmt.sa_rho}), so both measures point to the same hard images.`;
+document.getElementById("n-rt").innerHTML = `Trials slower than ${O.rt_limit / 1000} s (${O.rt_excluded} trials) are left out of all reaction-time figures. All median-RT charts in this report share one axis (0–${RT_MAX} ms) so they can be compared directly; only the per-participant chart is wider when one person's spread doesn't fit. ` +
+  `Occlusion number vs relative RT: Spearman ρ = ${R.occ_rho.toFixed(2)} (${D.fmt.occ_rho}).`;
+
+// ----------------------------------------------------------- series
+const S = D.series, P = S.pooled;
+const panels = document.getElementById("series-panels");
+S.objects.forEach(o => {
+  const div = document.createElement("div");
+  div.className = "panel";
+  const slopeTxt = o.slope != null ? `${(o.slope * 10).toFixed(0)} ms per +10 mm visible (p = ${o.p.toFixed(2)})` : "";
+  const ids = Array.from({ length: 10 }, (_, i) => `book_${o.object}_s${String(i + 1).padStart(2, "0")}`);
+  div.innerHTML = `<h3>${o.object}</h3><p class="meta">${o.n} trials, ${pct(o.acc)} correct · ${o.mm_min.toFixed(0)}–${o.mm_max.toFixed(0)} mm visible · ${slopeTxt}</p>
+    <div class="thumbs">${[0, 9].map(i => `<figure><div class="crop" data-img="${ids[i]}" role="button" tabindex="0" aria-label="View ${label(ids[i])}"><img src="../webpage/static/images/${ids[i]}.webp" alt="${o.object} step ${i + 1}"></div><figcaption>step ${i + 1}</figcaption></figure>`).join("")}</div>
+    <div class="chart" id="c-series-${o.object}"></div>`;
+  panels.appendChild(div);
+  div.querySelectorAll("[data-img]").forEach(c => {
+    c.onclick = () => openViewer(c.dataset.img, ids.filter(id => IMG[id]));
+    c.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.click(); } };
+  });
+  draw(`c-series-${o.object}`, () => {
+    const x0 = o.mm_min - 5, x1 = o.mm_max + 5;
+    return { traces: [
+      { type: "scatter", mode: "markers", x: o.trials.map(t => t.mm), y: o.trials.map(t => t.rt), imgs: o.trials.map(t => t.image),
+        marker: { color: css("--s1"), size: 9, opacity: 0.6, line: { color: css("--surface"), width: 1 } },
+        customdata: o.trials.map(t => [t.step, t.pid, pct(t.rel)]),
+        hovertemplate: "step %{customdata[0]}, %{x:.0f} mm visible<br>%{y} ms (%{customdata[2]} of own speed)<br>participant %{customdata[1]}<br><i>click to view</i><extra></extra>" },
+      { type: "scatter", mode: "lines", x: [x0, x1], y: [o.intercept + o.slope * x0, o.intercept + o.slope * x1],
+        line: { color: css("--text-2"), width: 2, dash: "dot" }, hoverinfo: "skip" }],
+      layout: base({ margin: { l: 10, r: 10, t: 10, b: 10 }, xaxis: { title: { text: "visible length (mm)" }, range: [x0, x1] },
+        yaxis: { title: { text: "reaction time (ms)" }, range: [0, SERIES_MAX] } }) };
+  });
+});
+document.getElementById("f-series").innerHTML = `All <b>${S.n}</b> series trials were answered correctly (${pct(S.acc)}), so accuracy can't show where the key part is yet: even the shortest visible piece (step 1) was enough. ` +
+  `Reaction time is the only signal: pooled over the four objects (controlling for object and participant), every extra 10 mm visible changes RT by <b>${P.pct_per_10mm_visible.toFixed(1)} %</b> (95 % CI ${P.ci[0].toFixed(1)} to ${P.ci[1].toFixed(1)} %, ${D.fmt.series}). ` +
+  (P.p < 0.05 ? `Read the other way, each extra mm hidden ${P.pct_per_10mm_visible < 0 ? "slows" : "speeds up"} answers by about ${Math.abs(P.pct_per_10mm_visible / 10).toFixed(1)} %.`
+   : `The interval includes zero, so <b>there is no measurable cost per mm hidden</b> within the range the series covers.`);
+document.getElementById("n-series").innerHTML = `The four panels share one reaction-time axis (0–${SERIES_MAX} ms${SERIES_MAX === RT_MAX ? ", the same as the other reaction-time charts" : "; wider than the median charts because these are single trials"}). Visible length is measured from the renders (analysis/measure_series.py): the object is cut out against a book-only render, mapped onto the table with the Blender camera and scaled with the ruler's printed cm scale (1 Blender unit ≈ ${S.unit_mm.toFixed(0)} mm). The scene objects are not all to real-world scale, so these are "scene mm"; expect about ±1 cm error per step. ` +
+  `Dotted line = linear fit per object. To find the key-part threshold you need steps where people start failing, i.e. renders with less of the object visible than step 1.`;
+
+// ----------------------------------------------------------- gallery
+const GALLERY = [["all", () => true], ["fixed images", i => !i.series], ...["pen", "marker", "pencil", "ruler"].map(o => [`${o} series`, i => i.series && i.object === o])];
+let galleryFilter = "all";
+function renderGallery() {
+  const f = GALLERY.find(g => g[0] === galleryFilter)[1];
+  const list = D.images.filter(f).sort((a, b) => a.image.localeCompare(b.image));
+  const ids = list.map(i => i.image);
+  const box = document.getElementById("gallery");
+  box.innerHTML = list.map(i => `<button class="card" data-img="${i.image}"><div class="crop"><img loading="lazy" src="${i.webp}" alt=""></div>
+    <div class="cap"><b>${label(i.image)}</b><span>${pct(i.acc)} correct · ${ms(i.rt)} · n=${i.n}</span></div></button>`).join("");
+  box.querySelectorAll(".card").forEach(c => c.onclick = () => openViewer(c.dataset.img, ids));
+  document.querySelectorAll("#gallery-filter .chip").forEach(c => c.setAttribute("aria-pressed", c.dataset.f === galleryFilter));
+}
+document.getElementById("gallery-filter").innerHTML = GALLERY.map(([n]) => `<button class="chip" data-f="${n}">${n}</button>`).join("");
+document.querySelectorAll("#gallery-filter .chip").forEach(c => c.onclick = () => { galleryFilter = c.dataset.f; renderGallery(); });
+renderGallery();
+</script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+participant,seed,language,age_group,device,screen,trial_order,block,image_id,occlusion_percentage,key_parts_shown,options,correct_answer,chosen_answer,is_correct,reaction_time_ms,exposure_ms,zoom,answer_mode,colors,timestamp,received_at
+4543b6b3,472,cs,20-29,phone,447x994,1,1,book_spoon_50_nokey,50,0,Metla|Kleštičky|Lžička|Stěrka,Lžička,Lžička,1,1078,1000,1,text,gray,2026-11-23T20:04:34,2026-11-23T20:04:35
+4543b6b3,472,cs,20-29,phone,447x994,2,1,book_whisk_5,5,1,Metla|Kleštičky|Lžička|Stěrka,Metla,Metla,1,1099,1000,2,text,gray,2026-11-23T20:04:36,2026-11-23T20:04:39
+4543b6b3,472,cs,20-29,phone,447x994,3,1,book_tongs_50,50,1,Metla|Kleštičky|Lžička|Stěrka,Kleštičky,Kleštičky,1,559,1000,1,text,gray,2026-11-23T20:04:37,2026-11-23T20:04:39
+4543b6b3,472,cs,20-29,phone,447x994,4,1,book_spatula_90_nokey,90,0,Metla|Kleštičky|Lžička|Stěrka,Stěrka,Stěrka,1,924,1000,2,text,gray,2026-11-23T20:04:39,2026-11-23T20:04:43
+4543b6b3,472,cs,20-29,phone,447x994,5,2,book_shovel_40_nokey,40,0,Kbelík|Koště|Lopata|Hrábě,Lopata,Lopata,1,1066,1000,1,image,gray,2026-11-23T20:04:42,2026-11-23T20:04:47
+4543b6b3,472,cs,20-29,phone,447x994,6,2,book_rake_5,5,1,Kbelík|Koště|Lopata|Hrábě,Hrábě,Hrábě,1,1855,1000,2,image,gray,2026-11-23T20:04:45,2026-11-23T20:04:50
+4543b6b3,472,cs,20-29,phone,447x994,7,2,book_bucket_20,20,1,Kbelík|Koště|Lopata|Hrábě,Kbelík,Kbelík,1,754,1000,1,image,gray,2026-11-23T20:04:47,2026-11-23T20:04:50
+4543b6b3,472,cs,20-29,phone,447x994,8,2,book_broom_15,15,1,Kbelík|Koště|Lopata|Hrábě,Koště,Koště,1,449,1000,2,image,gray,2026-11-23T20:04:49,2026-11-23T20:04:53
+cbd18cdf,476,cs,20-29,computer,1760x990,1,1,book_marker_25_nokey,25,0,Tužka|Pero|Fix|Pravítko,Fix,Fix,1,767,1000,1,image,gray,2026-11-24T19:52:52,2026-11-24T19:52:51
+cbd18cdf,476,cs,20-29,computer,1760x990,2,1,book_marker_10_nokey,10,0,Tužka|Pero|Fix|Pravítko,Fix,Fix,1,356,1000,1,image,gray,2026-11-24T19:52:53,2026-11-24T19:52:53
+cbd18cdf,476,cs,20-29,computer,1760x990,3,1,book_marker_10,10,1,Tužka|Pero|Fix|Pravítko,Fix,Fix,1,210,1000,1,image,gray,2026-11-24T19:52:54,2026-11-24T19:52:55
+cbd18cdf,476,cs,20-29,computer,1760x990,4,1,book_pen_25,25,1,Tužka|Pero|Fix|Pravítko,Pero,Pero,1,367,1000,2,image,gray,2026-11-24T19:52:55,2026-11-24T19:52:55
+cbd18cdf,476,cs,20-29,computer,1760x990,5,1,book_pen_10,10,1,Tužka|Pero|Fix|Pravítko,Pero,Pero,1,242,1000,2,image,gray,2026-11-24T19:52:57,2026-11-24T19:52:58
+cbd18cdf,476,cs,20-29,computer,1760x990,6,1,book_pencil_25,25,2,Tužka|Pero|Fix|Pravítko,Tužka,Tužka,1,488,1000,2,image,gray,2026-11-24T19:52:58,2026-11-24T19:52:58
+cbd18cdf,476,cs,20-29,computer,1760x990,7,1,book_pencil_10_nokey,10,0,Tužka|Pero|Fix|Pravítko,Tužka,Tužka,1,266,1000,2,image,gray,2026-11-24T19:52:59,2026-11-24T19:53:00
+cbd18cdf,476,cs,20-29,computer,1760x990,8,1,book_ruler_40,40,1,Tužka|Pero|Fix|Pravítko,Pravítko,Pravítko,1,195,1000,1,image,gray,2026-11-24T19:53:01,2026-11-24T19:53:00
+cbd18cdf,476,cs,20-29,computer,1760x990,9,1,book_pen_25_nokey,25,0,Tužka|Pero|Fix|Pravítko,Pero,Pero,1,218,1000,2,image,gray,2026-11-24T19:53:02,2026-11-24T19:53:02
+cbd18cdf,476,cs,20-29,computer,1760x990,10,2,book_pliers_40_nokey,40,0,Kladivo|Klíč na matice|Šroubovák|Kleště,Kleště,Kleště,1,1102,1000,1,image,gray,2026-11-24T19:53:06,2026-11-24T19:53:05
+cbd18cdf,476,cs,20-29,computer,1760x990,11,2,book_wrench_10,10,1,Kladivo|Klíč na matice|Šroubovák|Kleště,Klíč na matice,Klíč na matice,1,843,1000,2,image,gray,2026-11-24T19:53:08,2026-11-24T19:53:08
+cbd18cdf,476,cs,20-29,computer,1760x990,12,2,book_screwdriver_50_nokey,50,0,Kladivo|Klíč na matice|Šroubovák|Kleště,Šroubovák,Šroubovák,1,640,1000,2,image,gray,2026-11-24T19:53:10,2026-11-24T19:53:10
+cbd18cdf,476,cs,20-29,computer,1760x990,13,2,book_hammer_20,20,1,Kladivo|Klíč na matice|Šroubovák|Kleště,Kladivo,Kladivo,1,138,1000,1,image,gray,2026-11-24T19:53:11,2026-11-24T19:53:12
+cbd18cdf,476,cs,20-29,computer,1760x990,14,3,book_tongs_50,50,1,Lžička|Kleštičky|Stěrka|Metla,Kleštičky,Kleštičky,1,854,1000,1,text,gray,2026-11-24T19:53:14,2026-11-24T19:53:14
+cbd18cdf,476,cs,20-29,computer,1760x990,15,3,book_whisk_5,5,1,Lžička|Kleštičky|Stěrka|Metla,Metla,Metla,1,653,1000,2,text,gray,2026-11-24T19:53:16,2026-11-24T19:53:16
+cbd18cdf,476,cs,20-29,computer,1760x990,16,3,book_spatula_90_nokey,90,0,Lžička|Kleštičky|Stěrka|Metla,Stěrka,Stěrka,1,794,1000,1,text,gray,2026-11-24T19:53:17,2026-11-24T19:53:18
+cbd18cdf,476,cs,20-29,computer,1760x990,17,3,book_spoon_50_nokey,50,0,Lžička|Kleštičky|Stěrka|Metla,Lžička,Lžička,1,296,1000,2,text,gray,2026-11-24T19:53:19,2026-11-24T19:53:19
+cbd18cdf,476,cs,20-29,computer,1760x990,18,4,book_shovel_40_nokey,40,0,Kbelík|Koště|Lopata|Hrábě,Lopata,Lopata,1,900,1000,1,text,gray,2026-11-24T19:53:22,2026-11-24T19:53:21
+cbd18cdf,476,cs,20-29,computer,1760x990,19,4,book_broom_15,15,1,Kbelík|Koště|Lopata|Hrábě,Koště,Koště,1,1503,1000,2,text,gray,2026-11-24T19:53:24,2026-11-24T19:53:24
+cbd18cdf,476,cs,20-29,computer,1760x990,20,4,book_rake_5,5,1,Kbelík|Koště|Lopata|Hrábě,Hrábě,Hrábě,1,285,1000,1,text,gray,2026-11-24T19:53:26,2026-11-24T19:53:27
+cbd18cdf,476,cs,20-29,computer,1760x990,21,4,book_bucket_20,20,1,Kbelík|Koště|Lopata|Hrábě,Kbelík,Kbelík,1,367,1000,1,text,gray,2026-11-24T19:53:27,2026-11-24T19:53:27
+7d4a942b,384,cs,20-29,computer,1920x1080,1,1,book_wrench_10,10,1,Kladivo|Klíč na matice|Kleště|Šroubovák,Klíč na matice,Kladivo,0,4486,1000,1,text,gray,2026-11-24T20:02:50,2026-11-24T20:02:53
+7d4a942b,384,cs,20-29,computer,1920x1080,2,1,book_pliers_40_nokey,40,0,Kladivo|Klíč na matice|Kleště|Šroubovák,Kleště,Kleště,1,2159,1000,2,text,gray,2026-11-24T20:02:53,2026-11-24T20:02:56
+7d4a942b,384,cs,20-29,computer,1920x1080,3,1,book_hammer_20,20,1,Kladivo|Klíč na matice|Kleště|Šroubovák,Kladivo,Kladivo,1,1019,1000,2,text,gray,2026-11-24T20:02:55,2026-11-24T20:02:58
+7d4a942b,384,cs,20-29,computer,1920x1080,4,1,book_screwdriver_50_nokey,50,0,Kladivo|Klíč na matice|Kleště|Šroubovák,Šroubovák,Šroubovák,1,2710,1000,2,text,gray,2026-11-24T20:02:59,2026-11-24T20:03:01
+7d4a942b,384,cs,20-29,computer,1920x1080,5,2,book_whisk_5,5,1,Metla|Stěrka|Kleštičky|Lžička,Metla,Metla,1,1846,1000,1,text,gray,2026-11-24T20:03:06,2026-11-24T20:03:09
+7d4a942b,384,cs,20-29,computer,1920x1080,6,2,book_tongs_50,50,1,Metla|Stěrka|Kleštičky|Lžička,Kleštičky,Kleštičky,1,1502,1000,1,text,gray,2026-11-24T20:03:09,2026-11-24T20:03:11
+7d4a942b,384,cs,20-29,computer,1920x1080,7,2,book_spatula_90_nokey,90,0,Metla|Stěrka|Kleštičky|Lžička,Stěrka,Lžička,0,1230,1000,1,text,gray,2026-11-24T20:03:11,2026-11-24T20:03:13
+7d4a942b,384,cs,20-29,computer,1920x1080,8,2,book_spoon_50_nokey,50,0,Metla|Stěrka|Kleštičky|Lžička,Lžička,Lžička,1,502,1000,2,text,gray,2026-11-24T20:03:12,2026-11-24T20:03:16
+7d4a942b,384,cs,20-29,computer,1920x1080,9,3,book_marker_25_nokey,25,0,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,1012,1000,2,image,gray,2026-11-24T20:03:17,2026-11-24T20:03:19
+7d4a942b,384,cs,20-29,computer,1920x1080,10,3,book_pen_25_nokey,25,0,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,1458,1000,2,image,gray,2026-11-24T20:03:19,2026-11-24T20:03:22
+7d4a942b,384,cs,20-29,computer,1920x1080,11,3,book_ruler_40,40,1,Pravítko|Tužka|Fix|Pero,Pravítko,Tužka,0,2070,1000,1,image,gray,2026-11-24T20:03:22,2026-11-24T20:03:25
+7d4a942b,384,cs,20-29,computer,1920x1080,12,3,book_pencil_25,25,2,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,414,1000,2,image,gray,2026-11-24T20:03:24,2026-11-24T20:03:28
+7d4a942b,384,cs,20-29,computer,1920x1080,13,3,book_pen_10,10,1,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,1127,1000,1,image,gray,2026-11-24T20:03:26,2026-11-24T20:03:30
+7d4a942b,384,cs,20-29,computer,1920x1080,14,3,book_marker_10_nokey,10,0,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,414,1000,2,image,gray,2026-11-24T20:03:27,2026-11-24T20:03:30
+7d4a942b,384,cs,20-29,computer,1920x1080,15,3,book_marker_10,10,1,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,437,1000,1,image,gray,2026-11-24T20:03:29,2026-11-24T20:03:35
+7d4a942b,384,cs,20-29,computer,1920x1080,16,3,book_pen_25,25,1,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,688,1000,1,image,gray,2026-11-24T20:03:31,2026-11-24T20:03:35
+7d4a942b,384,cs,20-29,computer,1920x1080,17,3,book_pencil_10_nokey,10,0,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,859,1000,2,image,gray,2026-11-24T20:03:33,2026-11-24T20:03:37
+7d4a942b,384,cs,20-29,computer,1920x1080,18,4,book_broom_15,15,1,Lopata|Hrábě|Kbelík|Koště,Koště,Koště,1,983,1000,1,image,gray,2026-11-24T20:03:38,2026-11-24T20:03:40
+7d4a942b,384,cs,20-29,computer,1920x1080,19,4,book_rake_5,5,1,Lopata|Hrábě|Kbelík|Koště,Hrábě,Hrábě,1,4333,1000,1,image,gray,2026-11-24T20:03:43,2026-11-24T20:03:45
+7d4a942b,384,cs,20-29,computer,1920x1080,20,4,book_bucket_20,20,1,Lopata|Hrábě|Kbelík|Koště,Kbelík,Kbelík,1,749,1000,2,image,gray,2026-11-24T20:03:45,2026-11-24T20:03:47
+7d4a942b,384,cs,20-29,computer,1920x1080,21,4,book_shovel_40_nokey,40,0,Lopata|Hrábě|Kbelík|Koště,Lopata,Lopata,1,1894,1000,1,image,gray,2026-11-24T20:03:48,2026-11-24T20:03:50
+aca55f4d,355,cs,20-29,computer,2560x1440,1,1,book_spoon_50_nokey,50,0,Metla|Stěrka|Kleštičky|Lžička,Lžička,Kleštičky,0,8381,1000,1,image,gray,2026-11-24T20:04:09,2026-11-24T20:04:10
+aca55f4d,355,cs,20-29,computer,2560x1440,2,1,book_whisk_5,5,1,Metla|Stěrka|Kleštičky|Lžička,Metla,Stěrka,0,5429,1000,2,image,gray,2026-11-24T20:04:16,2026-11-24T20:04:16
+aca55f4d,355,cs,20-29,computer,2560x1440,3,1,book_spatula_90_nokey,90,0,Metla|Stěrka|Kleštičky|Lžička,Stěrka,Lžička,0,1315,1000,1,image,gray,2026-11-24T20:04:18,2026-11-24T20:04:18
+aca55f4d,355,cs,20-29,computer,2560x1440,4,1,book_tongs_50,50,1,Metla|Stěrka|Kleštičky|Lžička,Kleštičky,Kleštičky,1,585,1000,1,image,gray,2026-11-24T20:04:20,2026-11-24T20:04:21
+aca55f4d,355,cs,20-29,computer,2560x1440,5,2,book_bucket_20,20,1,Kbelík|Koště|Lopata|Hrábě,Kbelík,Kbelík,1,2179,1000,2,text,gray,2026-11-24T20:04:40,2026-11-24T20:04:41
+aca55f4d,355,cs,20-29,computer,2560x1440,6,2,book_rake_5,5,1,Kbelík|Koště|Lopata|Hrábě,Hrábě,Hrábě,1,1074,1000,2,text,gray,2026-11-24T20:04:42,2026-11-24T20:04:43
+aca55f4d,355,cs,20-29,computer,2560x1440,7,2,book_shovel_40_nokey,40,0,Kbelík|Koště|Lopata|Hrábě,Lopata,Lopata,1,56224,1000,2,text,gray,2026-11-24T20:05:40,2026-11-24T20:05:40
+aca55f4d,355,cs,20-29,computer,2560x1440,8,2,book_broom_15,15,1,Kbelík|Koště|Lopata|Hrábě,Koště,Koště,1,1421,1000,1,text,gray,2026-11-24T20:05:42,2026-11-24T20:05:43
+aca55f4d,355,cs,20-29,computer,2560x1440,9,3,book_pen_10,10,1,Pero|Fix|Tužka|Pravítko,Pero,Pero,1,2690,1000,2,image,gray,2026-11-24T20:06:16,2026-11-24T20:06:16
+aca55f4d,355,cs,20-29,computer,2560x1440,10,3,book_marker_10_nokey,10,0,Pero|Fix|Tužka|Pravítko,Fix,Fix,1,1339,1000,1,image,gray,2026-11-24T20:06:18,2026-11-24T20:06:18
+aca55f4d,355,cs,20-29,computer,2560x1440,11,3,book_marker_10,10,1,Pero|Fix|Tužka|Pravítko,Fix,Fix,1,766,1000,2,image,gray,2026-11-24T20:06:20,2026-11-24T20:06:21
+aca55f4d,355,cs,20-29,computer,2560x1440,12,3,book_marker_25_nokey,25,0,Pero|Fix|Tužka|Pravítko,Fix,Fix,1,2820,1000,1,image,gray,2026-11-24T20:06:24,2026-11-24T20:06:24
+aca55f4d,355,cs,20-29,computer,2560x1440,13,3,book_ruler_40,40,1,Pero|Fix|Tužka|Pravítko,Pravítko,Pravítko,1,782,1000,1,image,gray,2026-11-24T20:06:26,2026-11-24T20:06:26
+aca55f4d,355,cs,20-29,computer,2560x1440,14,3,book_pen_25,25,1,Pero|Fix|Tužka|Pravítko,Pero,Pero,1,842,1000,1,image,gray,2026-11-24T20:06:27,2026-11-24T20:06:28
+aca55f4d,355,cs,20-29,computer,2560x1440,15,3,book_pen_25_nokey,25,0,Pero|Fix|Tužka|Pravítko,Pero,Pero,1,4273,1000,1,image,gray,2026-11-24T20:06:33,2026-11-24T20:06:33
+aca55f4d,355,cs,20-29,computer,2560x1440,16,3,book_pencil_25,25,2,Pero|Fix|Tužka|Pravítko,Tužka,Tužka,1,1108,1000,2,image,gray,2026-11-24T20:06:35,2026-11-24T20:06:35
+aca55f4d,355,cs,20-29,computer,2560x1440,17,3,book_pencil_10_nokey,10,0,Pero|Fix|Tužka|Pravítko,Tužka,Tužka,1,686,1000,2,image,gray,2026-11-24T20:06:36,2026-11-24T20:06:37
+aca55f4d,355,cs,20-29,computer,2560x1440,18,4,book_wrench_10,10,1,Kladivo|Šroubovák|Klíč na matice|Kleště,Klíč na matice,Klíč na matice,1,2448,1000,1,text,gray,2026-11-24T20:06:46,2026-11-24T20:06:47
+aca55f4d,355,cs,20-29,computer,2560x1440,19,4,book_pliers_40_nokey,40,0,Kladivo|Šroubovák|Klíč na matice|Kleště,Kleště,Kleště,1,695,1000,2,text,gray,2026-11-24T20:06:48,2026-11-24T20:06:48
+aca55f4d,355,cs,20-29,computer,2560x1440,20,4,book_hammer_20,20,1,Kladivo|Šroubovák|Klíč na matice|Kleště,Kladivo,Kladivo,1,1075,1000,2,text,gray,2026-11-24T20:06:50,2026-11-24T20:06:50
+aca55f4d,355,cs,20-29,computer,2560x1440,21,4,book_screwdriver_50_nokey,50,0,Kladivo|Šroubovák|Klíč na matice|Kleště,Šroubovák,Šroubovák,1,1462,1000,1,text,gray,2026-11-24T20:06:52,2026-11-24T20:06:54
+5a3f30de,464,cs,20-29,phone,486x1079,1,1,book_screwdriver_50_nokey,50,0,Kleště|Kladivo|Klíč na matice|Šroubovák,Šroubovák,Šroubovák,1,4773,1000,1,image,gray,2026-11-24T20:15:36,2026-11-24T20:15:38
+5a3f30de,464,cs,20-29,phone,486x1079,2,1,book_hammer_20,20,1,Kleště|Kladivo|Klíč na matice|Šroubovák,Kladivo,Kladivo,1,713,1000,2,image,gray,2026-11-24T20:15:38,2026-11-24T20:15:42
+5a3f30de,464,cs,20-29,phone,486x1079,3,1,book_wrench_10,10,1,Kleště|Kladivo|Klíč na matice|Šroubovák,Klíč na matice,Klíč na matice,1,700,1000,2,image,gray,2026-11-24T20:15:39,2026-11-24T20:15:42
+5a3f30de,464,cs,20-29,phone,486x1079,4,1,book_pliers_40_nokey,40,0,Kleště|Kladivo|Klíč na matice|Šroubovák,Kleště,Kleště,1,637,1000,1,image,gray,2026-11-24T20:15:41,2026-11-24T20:15:42
+5a3f30de,464,cs,20-29,phone,486x1079,5,2,book_bucket_20,20,1,Kbelík|Koště|Hrábě|Lopata,Kbelík,Kbelík,1,1868,1000,1,text,gray,2026-11-24T20:15:50,2026-11-24T20:15:49
+5a3f30de,464,cs,20-29,phone,486x1079,6,2,book_broom_15,15,1,Kbelík|Koště|Hrábě|Lopata,Koště,Koště,1,855,1000,1,text,gray,2026-11-24T20:15:52,2026-11-24T20:15:55
+5a3f30de,464,cs,20-29,phone,486x1079,7,2,book_shovel_40_nokey,40,0,Kbelík|Koště|Hrábě|Lopata,Lopata,Hrábě,0,1729,1000,2,text,gray,2026-11-24T20:15:55,2026-11-24T20:15:55
+5a3f30de,464,cs,20-29,phone,486x1079,8,2,book_rake_5,5,1,Kbelík|Koště|Hrábě|Lopata,Hrábě,Hrábě,1,870,1000,1,text,gray,2026-11-24T20:15:57,2026-11-24T20:15:58
+5a3f30de,464,cs,20-29,phone,486x1079,9,3,book_marker_25_nokey,25,0,Pravítko|Tužka|Pero|Fix,Fix,Fix,1,1070,1000,2,text,gray,2026-11-24T20:16:12,2026-11-24T20:16:12
+5a3f30de,464,cs,20-29,phone,486x1079,10,3,book_marker_10_nokey,10,0,Pravítko|Tužka|Pero|Fix,Fix,Fix,1,804,1000,1,text,gray,2026-11-24T20:16:14,2026-11-24T20:16:14
+5a3f30de,464,cs,20-29,phone,486x1079,11,3,book_marker_10,10,1,Pravítko|Tužka|Pero|Fix,Fix,Fix,1,551,1000,1,text,gray,2026-11-24T20:16:16,2026-11-24T20:16:17
+5a3f30de,464,cs,20-29,phone,486x1079,12,3,book_pen_25_nokey,25,0,Pravítko|Tužka|Pero|Fix,Pero,Pero,1,929,1000,1,text,gray,2026-11-24T20:16:18,2026-11-24T20:16:20
+5a3f30de,464,cs,20-29,phone,486x1079,13,3,book_pen_10,10,1,Pravítko|Tužka|Pero|Fix,Pero,Pero,1,1461,1000,2,text,gray,2026-11-24T20:16:20,2026-11-24T20:16:20
+5a3f30de,464,cs,20-29,phone,486x1079,14,3,book_pencil_25,25,2,Pravítko|Tužka|Pero|Fix,Tužka,Tužka,1,607,1000,2,text,gray,2026-11-24T20:16:22,2026-11-24T20:16:23
+5a3f30de,464,cs,20-29,phone,486x1079,15,3,book_ruler_40,40,1,Pravítko|Tužka|Pero|Fix,Pravítko,Pravítko,1,545,1000,2,text,gray,2026-11-24T20:16:23,2026-11-24T20:16:23
+5a3f30de,464,cs,20-29,phone,486x1079,16,3,book_pen_25,25,1,Pravítko|Tužka|Pero|Fix,Pero,Pero,1,665,1000,2,text,gray,2026-11-24T20:16:25,2026-11-24T20:16:27
+5a3f30de,464,cs,20-29,phone,486x1079,17,3,book_pencil_10_nokey,10,0,Pravítko|Tužka|Pero|Fix,Tužka,Tužka,1,532,1000,2,text,gray,2026-11-24T20:16:27,2026-11-24T20:16:27
+5a3f30de,464,cs,20-29,phone,486x1079,18,4,book_whisk_5,5,1,Stěrka|Kleštičky|Metla|Lžička,Metla,Metla,1,855,1000,1,image,gray,2026-11-24T20:16:43,2026-11-24T20:16:42
+5a3f30de,464,cs,20-29,phone,486x1079,19,4,book_tongs_50,50,1,Stěrka|Kleštičky|Metla|Lžička,Kleštičky,Kleštičky,1,586,1000,2,image,gray,2026-11-24T20:16:44,2026-11-24T20:16:44
+5a3f30de,464,cs,20-29,phone,486x1079,20,4,book_spatula_90_nokey,90,0,Stěrka|Kleštičky|Metla|Lžička,Stěrka,Lžička,0,1367,1000,1,image,gray,2026-11-24T20:16:47,2026-11-24T20:16:47
+5a3f30de,464,cs,20-29,phone,486x1079,21,4,book_spoon_50_nokey,50,0,Stěrka|Kleštičky|Metla|Lžička,Lžička,Lžička,1,412,1000,1,image,gray,2026-11-24T20:16:48,2026-11-24T20:16:49
+1a431450,124,cs,20-29,computer,2560x1440,1,1,book_screwdriver_50_nokey,50,0,Kleště|Kladivo|Klíč na matice|Šroubovák,Šroubovák,Šroubovák,1,974,1000,1,text,gray,2026-11-24T20:26:54,2026-11-24T20:26:55
+1a431450,124,cs,20-29,computer,2560x1440,2,1,book_wrench_10,10,1,Kleště|Kladivo|Klíč na matice|Šroubovák,Klíč na matice,Kleště,0,1665,1000,1,text,gray,2026-11-24T20:26:57,2026-11-24T20:26:58
+1a431450,124,cs,20-29,computer,2560x1440,3,1,book_hammer_20,20,1,Kleště|Kladivo|Klíč na matice|Šroubovák,Kladivo,Kladivo,1,685,1000,1,text,gray,2026-11-24T20:26:59,2026-11-24T20:27:00
+1a431450,124,cs,20-29,computer,2560x1440,4,1,book_pliers_40_nokey,40,0,Kleště|Kladivo|Klíč na matice|Šroubovák,Kleště,Kleště,1,642,1000,2,text,gray,2026-11-24T20:27:00,2026-11-24T20:27:03
+1a431450,124,cs,20-29,computer,2560x1440,5,2,book_pencil_10_nokey,10,0,Pravítko|Fix|Tužka|Pero,Tužka,Tužka,1,729,1000,2,image,gray,2026-11-24T20:27:24,2026-11-24T20:27:25
+1a431450,124,cs,20-29,computer,2560x1440,6,2,book_pencil_25,25,2,Pravítko|Fix|Tužka|Pero,Tužka,Tužka,1,1288,1000,2,image,gray,2026-11-24T20:27:26,2026-11-24T20:27:27
+1a431450,124,cs,20-29,computer,2560x1440,7,2,book_ruler_40,40,1,Pravítko|Fix|Tužka|Pero,Pravítko,Pravítko,1,374,1000,2,image,gray,2026-11-24T20:27:27,2026-11-24T20:27:29
+1a431450,124,cs,20-29,computer,2560x1440,8,2,book_pen_10,10,1,Pravítko|Fix|Tužka|Pero,Pero,Pero,1,1107,1000,2,image,gray,2026-11-24T20:27:30,2026-11-24T20:27:32
+1a431450,124,cs,20-29,computer,2560x1440,9,2,book_marker_10_nokey,10,0,Pravítko|Fix|Tužka|Pero,Fix,Fix,1,323,1000,2,image,gray,2026-11-24T20:27:31,2026-11-24T20:27:32
+1a431450,124,cs,20-29,computer,2560x1440,10,2,book_marker_25_nokey,25,0,Pravítko|Fix|Tužka|Pero,Fix,Fix,1,343,1000,2,image,gray,2026-11-24T20:27:32,2026-11-24T20:27:35
+1a431450,124,cs,20-29,computer,2560x1440,11,2,book_marker_10,10,1,Pravítko|Fix|Tužka|Pero,Fix,Fix,1,786,1000,1,image,gray,2026-11-24T20:27:34,2026-11-24T20:27:35
+1a431450,124,cs,20-29,computer,2560x1440,12,2,book_pen_25_nokey,25,0,Pravítko|Fix|Tužka|Pero,Pero,Pero,1,2370,1000,1,image,gray,2026-11-24T20:27:37,2026-11-24T20:27:38
+1a431450,124,cs,20-29,computer,2560x1440,13,2,book_pen_25,25,1,Pravítko|Fix|Tužka|Pero,Pero,Pero,1,343,1000,2,image,gray,2026-11-24T20:27:39,2026-11-24T20:27:41
+1a431450,124,cs,20-29,computer,2560x1440,14,3,book_shovel_40_nokey,40,0,Hrábě|Koště|Lopata|Kbelík,Lopata,Lopata,1,2852,1000,1,text,gray,2026-11-24T20:27:59,2026-11-24T20:28:00
+1a431450,124,cs,20-29,computer,2560x1440,15,3,book_bucket_20,20,1,Hrábě|Koště|Lopata|Kbelík,Kbelík,Kbelík,1,530,1000,1,text,gray,2026-11-24T20:28:01,2026-11-24T20:28:02
+1a431450,124,cs,20-29,computer,2560x1440,16,3,book_rake_5,5,1,Hrábě|Koště|Lopata|Kbelík,Hrábě,Hrábě,1,486,1000,2,text,gray,2026-11-24T20:28:02,2026-11-24T20:28:05
+1a431450,124,cs,20-29,computer,2560x1440,17,3,book_broom_15,15,1,Hrábě|Koště|Lopata|Kbelík,Koště,Koště,1,552,1000,2,text,gray,2026-11-24T20:28:04,2026-11-24T20:28:05
+1a431450,124,cs,20-29,computer,2560x1440,18,4,book_spoon_50_nokey,50,0,Lžička|Kleštičky|Metla|Stěrka,Lžička,Lžička,1,449,1000,1,image,gray,2026-11-24T20:28:30,2026-11-24T20:28:31
+1a431450,124,cs,20-29,computer,2560x1440,19,4,book_tongs_50,50,1,Lžička|Kleštičky|Metla|Stěrka,Kleštičky,Kleštičky,1,747,1000,1,image,gray,2026-11-24T20:28:32,2026-11-24T20:28:34
+1a431450,124,cs,20-29,computer,2560x1440,20,4,book_spatula_90_nokey,90,0,Lžička|Kleštičky|Metla|Stěrka,Stěrka,Stěrka,1,1420,1000,1,image,gray,2026-11-24T20:28:35,2026-11-24T20:28:37
+1a431450,124,cs,20-29,computer,2560x1440,21,4,book_whisk_5,5,1,Lžička|Kleštičky|Metla|Stěrka,Metla,Metla,1,1383,1000,1,image,gray,2026-11-24T20:28:37,2026-11-24T20:28:40
+c5ec4df7,26,cs,20-29,computer,1760x990,1,1,book_bucket_20,20,1,Hrábě|Lopata|Kbelík|Koště,Kbelík,Kbelík,1,645,1000,1,image,gray,2026-11-24T21:31:47,2026-11-24T21:31:46
+c5ec4df7,26,cs,20-29,computer,1760x990,2,1,book_broom_15,15,1,Hrábě|Lopata|Kbelík|Koště,Koště,Koště,1,596,1000,1,image,gray,2026-11-24T21:31:48,2026-11-24T21:31:49
+c5ec4df7,26,cs,20-29,computer,1760x990,3,1,book_rake_5,5,1,Hrábě|Lopata|Kbelík|Koště,Hrábě,Hrábě,1,579,1000,2,image,gray,2026-11-24T21:31:50,2026-11-24T21:31:51
+c5ec4df7,26,cs,20-29,computer,1760x990,4,1,book_shovel_40_nokey,40,0,Hrábě|Lopata|Kbelík|Koště,Lopata,Lopata,1,495,1000,2,image,gray,2026-11-24T21:31:51,2026-11-24T21:31:51
+c5ec4df7,26,cs,20-29,computer,1760x990,5,2,book_pen_s06,,,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,652,1000,1,text,gray,2026-11-24T21:31:58,2026-11-24T21:31:58
+c5ec4df7,26,cs,20-29,computer,1760x990,6,2,book_pencil_s04,,,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,551,1000,2,text,gray,2026-11-24T21:32:00,2026-11-24T21:32:00
+c5ec4df7,26,cs,20-29,computer,1760x990,7,2,book_marker_s07,,,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,508,1000,1,text,gray,2026-11-24T21:32:01,2026-11-24T21:32:03
+c5ec4df7,26,cs,20-29,computer,1760x990,8,2,book_pencil_10_nokey,10,0,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,435,1000,2,text,gray,2026-11-24T21:32:03,2026-11-24T21:32:03
+c5ec4df7,26,cs,20-29,computer,1760x990,9,2,book_pen_10,10,1,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,252,1000,1,text,gray,2026-11-24T21:32:04,2026-11-24T21:32:05
+c5ec4df7,26,cs,20-29,computer,1760x990,10,2,book_pen_25_nokey,25,0,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,140,1000,1,text,gray,2026-11-24T21:32:05,2026-11-24T21:32:05
+c5ec4df7,26,cs,20-29,computer,1760x990,11,2,book_ruler_40,40,1,Pravítko|Tužka|Fix|Pero,Pravítko,Pravítko,1,367,1000,1,text,gray,2026-11-24T21:32:07,2026-11-24T21:32:08
+c5ec4df7,26,cs,20-29,computer,1760x990,12,2,book_ruler_s01,,,Pravítko|Tužka|Fix|Pero,Pravítko,Pravítko,1,387,1000,1,text,gray,2026-11-24T21:32:08,2026-11-24T21:32:08
+c5ec4df7,26,cs,20-29,computer,1760x990,13,2,book_marker_s10,,,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,475,1000,2,text,gray,2026-11-24T21:32:10,2026-11-24T21:32:10
+c5ec4df7,26,cs,20-29,computer,1760x990,14,2,book_pencil_s09,,,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,316,1000,1,text,gray,2026-11-24T21:32:11,2026-11-24T21:32:10
+c5ec4df7,26,cs,20-29,computer,1760x990,15,2,book_marker_s05,,,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,415,1000,1,text,gray,2026-11-24T21:32:12,2026-11-24T21:32:13
+c5ec4df7,26,cs,20-29,computer,1760x990,16,2,book_ruler_s03,,,Pravítko|Tužka|Fix|Pero,Pravítko,Pravítko,1,448,1000,2,text,gray,2026-11-24T21:32:14,2026-11-24T21:32:15
+c5ec4df7,26,cs,20-29,computer,1760x990,17,2,book_pen_s10,,,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,427,1000,1,text,gray,2026-11-24T21:32:15,2026-11-24T21:32:15
+c5ec4df7,26,cs,20-29,computer,1760x990,18,2,book_pen_s01,,,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,287,1000,1,text,gray,2026-11-24T21:32:16,2026-11-24T21:32:18
+c5ec4df7,26,cs,20-29,computer,1760x990,19,2,book_pencil_s07,,,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,445,1000,1,text,gray,2026-11-24T21:32:18,2026-11-24T21:32:18
+c5ec4df7,26,cs,20-29,computer,1760x990,20,2,book_marker_25_nokey,25,0,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,351,1000,2,text,gray,2026-11-24T21:32:19,2026-11-24T21:32:21
+c5ec4df7,26,cs,20-29,computer,1760x990,21,2,book_ruler_s09,,,Pravítko|Tužka|Fix|Pero,Pravítko,Pravítko,1,813,1000,1,text,gray,2026-11-24T21:32:21,2026-11-24T21:32:21
+c5ec4df7,26,cs,20-29,computer,1760x990,22,2,book_marker_s03,,,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,458,1000,2,text,gray,2026-11-24T21:32:22,2026-11-24T21:32:24
+c5ec4df7,26,cs,20-29,computer,1760x990,23,2,book_ruler_s05,,,Pravítko|Tužka|Fix|Pero,Pravítko,Pravítko,1,502,1000,2,text,gray,2026-11-24T21:32:24,2026-11-24T21:32:24
+c5ec4df7,26,cs,20-29,computer,1760x990,24,2,book_marker_s06,,,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,305,1000,2,text,gray,2026-11-24T21:32:25,2026-11-24T21:32:27
+c5ec4df7,26,cs,20-29,computer,1760x990,25,2,book_marker_10,10,1,Pravítko|Tužka|Fix|Pero,Fix,Fix,1,139,1000,1,text,gray,2026-11-24T21:32:26,2026-11-24T21:32:27
+c5ec4df7,26,cs,20-29,computer,1760x990,26,2,book_ruler_s06,,,Pravítko|Tužka|Fix|Pero,Pravítko,Pravítko,1,904,1000,2,text,gray,2026-11-24T21:32:28,2026-11-24T21:32:29
+c5ec4df7,26,cs,20-29,computer,1760x990,27,2,book_pencil_s03,,,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,447,1000,2,text,gray,2026-11-24T21:32:30,2026-11-24T21:32:29
+c5ec4df7,26,cs,20-29,computer,1760x990,28,2,book_pencil_s10,,,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,242,1000,1,text,gray,2026-11-24T21:32:31,2026-11-24T21:32:33
+c5ec4df7,26,cs,20-29,computer,1760x990,29,2,book_pencil_s08,,,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,501,1000,2,text,gray,2026-11-24T21:32:33,2026-11-24T21:32:33
+c5ec4df7,26,cs,20-29,computer,1760x990,30,2,book_pen_25,25,1,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,487,1000,2,text,gray,2026-11-24T21:32:34,2026-11-24T21:32:33
+c5ec4df7,26,cs,20-29,computer,1760x990,31,2,book_ruler_s02,,,Pravítko|Tužka|Fix|Pero,Pravítko,Pravítko,1,381,1000,2,text,gray,2026-11-24T21:32:35,2026-11-24T21:32:36
+c5ec4df7,26,cs,20-29,computer,1760x990,32,2,book_pen_s02,,,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,284,1000,2,text,gray,2026-11-24T21:32:37,2026-11-24T21:32:36
+c5ec4df7,26,cs,20-29,computer,1760x990,33,2,book_pencil_25,25,2,Pravítko|Tužka|Fix|Pero,Tužka,Tužka,1,951,1000,1,text,gray,2026-11-24T21:32:39,2026-11-24T21:32:38
+c5ec4df7,26,cs,20-29,computer,1760x990,34,2,book_pen_s09,,,Pravítko|Tužka|Fix|Pero,Pero,Pero,1,381,1000,2,text,gray,2026-11-24T21:32:40,2026-11-24T21:32:41
+c5ec4df7,26,cs,20-29,computer,1760x990,35,3,book_spatula_90_nokey,90,0,Kleštičky|Metla|Lžička|Stěrka,Stěrka,Stěrka,1,1725,1000,2,text,gray,2026-11-24T21:32:49,2026-11-24T21:32:48
+c5ec4df7,26,cs,20-29,computer,1760x990,36,3,book_spoon_50_nokey,50,0,Kleštičky|Metla|Lžička|Stěrka,Lžička,Lžička,1,1137,1000,1,text,gray,2026-11-24T21:32:51,2026-11-24T21:32:52
+c5ec4df7,26,cs,20-29,computer,1760x990,37,3,book_whisk_5,5,1,Kleštičky|Metla|Lžička|Stěrka,Metla,Metla,1,625,1000,2,text,gray,2026-11-24T21:32:53,2026-11-24T21:32:53
+c5ec4df7,26,cs,20-29,computer,1760x990,38,3,book_tongs_50,50,1,Kleštičky|Metla|Lžička|Stěrka,Kleštičky,Kleštičky,1,554,1000,2,text,gray,2026-11-24T21:32:55,2026-11-24T21:32:55
+c5ec4df7,26,cs,20-29,computer,1760x990,39,4,book_hammer_20,20,1,Kladivo|Šroubovák|Kleště|Klíč na matice,Kladivo,Kladivo,1,689,1000,1,image,gray,2026-11-24T21:32:58,2026-11-24T21:32:57
+c5ec4df7,26,cs,20-29,computer,1760x990,40,4,book_pliers_40_nokey,40,0,Kladivo|Šroubovák|Kleště|Klíč na matice,Kleště,Kleště,1,577,1000,1,image,gray,2026-11-24T21:33:00,2026-11-24T21:32:59
+c5ec4df7,26,cs,20-29,computer,1760x990,41,4,book_wrench_10,10,1,Kladivo|Šroubovák|Kleště|Klíč na matice,Klíč na matice,Klíč na matice,1,962,1000,2,image,gray,2026-11-24T21:33:02,2026-11-24T21:33:02
+c5ec4df7,26,cs,20-29,computer,1760x990,42,4,book_screwdriver_50_nokey,50,0,Kladivo|Šroubovák|Kleště|Klíč na matice,Šroubovák,Šroubovák,1,922,1000,1,image,gray,2026-11-24T21:33:03,2026-11-24T21:33:05
+428be9fe,140,cs,20-29,phone,393x852,1,1,book_spoon_50_nokey,50,0,Kleštičky|Metla|Lžička|Stěrka,Lžička,Metla,0,2706,1000,2,text,gray,2026-11-24T21:44:47,2026-11-24T21:44:48
+428be9fe,140,cs,20-29,phone,393x852,2,1,book_whisk_5,5,1,Kleštičky|Metla|Lžička|Stěrka,Metla,Metla,1,2123,1000,2,text,gray,2026-11-24T21:44:50,2026-11-24T21:44:51
+428be9fe,140,cs,20-29,phone,393x852,3,1,book_tongs_50,50,1,Kleštičky|Metla|Lžička|Stěrka,Kleštičky,Kleštičky,1,1098,1000,1,text,gray,2026-11-24T21:44:52,2026-11-24T21:44:54
+428be9fe,140,cs,20-29,phone,393x852,4,1,book_spatula_90_nokey,90,0,Kleštičky|Metla|Lžička|Stěrka,Stěrka,Lžička,0,1746,1000,2,text,gray,2026-11-24T21:44:55,2026-11-24T21:44:57
+428be9fe,140,cs,20-29,phone,393x852,5,2,book_wrench_10,10,1,Klíč na matice|Kleště|Šroubovák|Kladivo,Klíč na matice,Klíč na matice,1,851,1000,1,image,gray,2026-11-24T21:45:10,2026-11-24T21:45:11
+428be9fe,140,cs,20-29,phone,393x852,6,2,book_screwdriver_50_nokey,50,0,Klíč na matice|Kleště|Šroubovák|Kladivo,Šroubovák,Šroubovák,1,753,1000,2,image,gray,2026-11-24T21:45:11,2026-11-24T21:45:14
+428be9fe,140,cs,20-29,phone,393x852,7,2,book_hammer_20,20,1,Klíč na matice|Kleště|Šroubovák|Kladivo,Kladivo,Kladivo,1,644,1000,2,image,gray,2026-11-24T21:45:13,2026-11-24T21:45:16
+428be9fe,140,cs,20-29,phone,393x852,8,2,book_pliers_40_nokey,40,0,Klíč na matice|Kleště|Šroubovák|Kladivo,Kleště,Kleště,1,627,1000,1,image,gray,2026-11-24T21:45:15,2026-11-24T21:45:16
+428be9fe,140,cs,20-29,phone,393x852,9,3,book_broom_15,15,1,Kbelík|Koště|Lopata|Hrábě,Koště,Koště,1,895,1000,1,text,gray,2026-11-24T21:45:37,2026-11-24T21:45:38
+428be9fe,140,cs,20-29,phone,393x852,10,3,book_bucket_20,20,1,Kbelík|Koště|Lopata|Hrábě,Kbelík,Kbelík,1,674,1000,2,text,gray,2026-11-24T21:45:39,2026-11-24T21:45:41
+428be9fe,140,cs,20-29,phone,393x852,11,3,book_rake_5,5,1,Kbelík|Koště|Lopata|Hrábě,Hrábě,Hrábě,1,479,1000,2,text,gray,2026-11-24T21:45:40,2026-11-24T21:45:43
+428be9fe,140,cs,20-29,phone,393x852,12,3,book_shovel_40_nokey,40,0,Kbelík|Koště|Lopata|Hrábě,Lopata,Lopata,1,498,1000,1,text,gray,2026-11-24T21:45:42,2026-11-24T21:45:45
+428be9fe,140,cs,20-29,phone,393x852,13,4,book_ruler_s09,,,Fix|Tužka|Pero|Pravítko,Pravítko,Pravítko,1,757,1000,1,image,gray,2026-11-24T21:45:52,2026-11-24T21:45:53
+428be9fe,140,cs,20-29,phone,393x852,14,4,book_marker_10,10,1,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,843,1000,1,image,gray,2026-11-24T21:45:54,2026-11-24T21:45:56
+428be9fe,140,cs,20-29,phone,393x852,15,4,book_pencil_s02,,,Fix|Tužka|Pero|Pravítko,Tužka,Tužka,1,748,1000,1,image,gray,2026-11-24T21:45:56,2026-11-24T21:45:58
+428be9fe,140,cs,20-29,phone,393x852,16,4,book_pencil_s03,,,Fix|Tužka|Pero|Pravítko,Tužka,Tužka,1,924,1000,1,image,gray,2026-11-24T21:45:58,2026-11-24T21:46:00
+428be9fe,140,cs,20-29,phone,393x852,17,4,book_marker_s02,,,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,863,1000,2,image,gray,2026-11-24T21:46:00,2026-11-24T21:46:02
+428be9fe,140,cs,20-29,phone,393x852,18,4,book_pencil_s10,,,Fix|Tužka|Pero|Pravítko,Tužka,Tužka,1,945,1000,1,image,gray,2026-11-24T21:46:02,2026-11-24T21:46:04
+428be9fe,140,cs,20-29,phone,393x852,19,4,book_pencil_s09,,,Fix|Tužka|Pero|Pravítko,Tužka,Tužka,1,562,1000,2,image,gray,2026-11-24T21:46:03,2026-11-24T21:46:04
+428be9fe,140,cs,20-29,phone,393x852,20,4,book_pen_s01,,,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,642,1000,1,image,gray,2026-11-24T21:46:05,2026-11-24T21:46:08
+428be9fe,140,cs,20-29,phone,393x852,21,4,book_pen_s04,,,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,616,1000,2,image,gray,2026-11-24T21:46:07,2026-11-24T21:46:08
+428be9fe,140,cs,20-29,phone,393x852,22,4,book_ruler_s04,,,Fix|Tužka|Pero|Pravítko,Pravítko,Pravítko,1,828,1000,2,image,gray,2026-11-24T21:46:08,2026-11-24T21:46:11
+428be9fe,140,cs,20-29,phone,393x852,23,4,book_marker_s07,,,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,743,1000,2,image,gray,2026-11-24T21:46:10,2026-11-24T21:46:11
+428be9fe,140,cs,20-29,phone,393x852,24,4,book_ruler_s08,,,Fix|Tužka|Pero|Pravítko,Pravítko,Pravítko,1,547,1000,1,image,gray,2026-11-24T21:46:12,2026-11-24T21:46:14
+428be9fe,140,cs,20-29,phone,393x852,25,4,book_ruler_s02,,,Fix|Tužka|Pero|Pravítko,Pravítko,Pravítko,1,544,1000,2,image,gray,2026-11-24T21:46:13,2026-11-24T21:46:14
+428be9fe,140,cs,20-29,phone,393x852,26,4,book_pen_s10,,,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,994,1000,2,image,gray,2026-11-24T21:46:15,2026-11-24T21:46:18
+428be9fe,140,cs,20-29,phone,393x852,27,4,book_pen_25,25,1,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,491,1000,1,image,gray,2026-11-24T21:46:17,2026-11-24T21:46:18
+428be9fe,140,cs,20-29,phone,393x852,28,4,book_pen_s08,,,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,513,1000,2,image,gray,2026-11-24T21:46:18,2026-11-24T21:46:21
+428be9fe,140,cs,20-29,phone,393x852,29,4,book_ruler_s06,,,Fix|Tužka|Pero|Pravítko,Pravítko,Pravítko,1,511,1000,1,image,gray,2026-11-24T21:46:20,2026-11-24T21:46:23
+428be9fe,140,cs,20-29,phone,393x852,30,4,book_ruler_s10,,,Fix|Tužka|Pero|Pravítko,Pravítko,Pravítko,1,516,1000,1,image,gray,2026-11-24T21:46:21,2026-11-24T21:46:23
+428be9fe,140,cs,20-29,phone,393x852,31,4,book_ruler_s03,,,Fix|Tužka|Pero|Pravítko,Pravítko,Pravítko,1,479,1000,1,image,gray,2026-11-24T21:46:23,2026-11-24T21:46:27
+428be9fe,140,cs,20-29,phone,393x852,32,4,book_pen_10,10,1,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,792,1000,2,image,gray,2026-11-24T21:46:25,2026-11-24T21:46:27
+428be9fe,140,cs,20-29,phone,393x852,33,4,book_marker_25_nokey,25,0,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,644,1000,2,image,gray,2026-11-24T21:46:26,2026-11-24T21:46:29
+428be9fe,140,cs,20-29,phone,393x852,34,4,book_pencil_s08,,,Fix|Tužka|Pero|Pravítko,Tužka,Tužka,1,512,1000,1,image,gray,2026-11-24T21:46:28,2026-11-24T21:46:29
+428be9fe,140,cs,20-29,phone,393x852,35,4,book_marker_s06,,,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,761,1000,2,image,gray,2026-11-24T21:46:30,2026-11-24T21:46:33
+428be9fe,140,cs,20-29,phone,393x852,36,4,book_pencil_s04,,,Fix|Tužka|Pero|Pravítko,Tužka,Tužka,1,477,1000,1,image,gray,2026-11-24T21:46:31,2026-11-24T21:46:33
+428be9fe,140,cs,20-29,phone,393x852,37,4,book_pen_25_nokey,25,0,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,1863,1000,2,image,gray,2026-11-24T21:46:34,2026-11-24T21:46:36
+428be9fe,140,cs,20-29,phone,393x852,38,4,book_marker_s01,,,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,675,1000,2,image,gray,2026-11-24T21:46:36,2026-11-24T21:46:38
+428be9fe,140,cs,20-29,phone,393x852,39,4,book_marker_s03,,,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,632,1000,1,image,gray,2026-11-24T21:46:37,2026-11-24T21:46:40
+428be9fe,140,cs,20-29,phone,393x852,40,4,book_pen_s05,,,Fix|Tužka|Pero|Pravítko,Pero,Pero,1,559,1000,1,image,gray,2026-11-24T21:46:39,2026-11-24T21:46:40
+428be9fe,140,cs,20-29,phone,393x852,41,4,book_marker_s04,,,Fix|Tužka|Pero|Pravítko,Fix,Fix,1,595,1000,1,image,gray,2026-11-24T21:46:40,2026-11-24T21:46:43
+428be9fe,140,cs,20-29,phone,393x852,42,4,book_pencil_s01,,,Fix|Tužka|Pero|Pravítko,Tužka,Tužka,1,661,1000,2,image,gray,2026-11-24T21:46:42,2026-11-24T21:46:43
+2fabc2ae,124,cs,20-29,phone,491x1091,1,1,book_screwdriver_50_nokey,50,0,Kladivo|Šroubovák|Kleště|Klíč na matice,Šroubovák,Šroubovák,1,1949,1000,1,text,gray,2026-11-25T10:16:08,2026-11-25T10:16:09
+2fabc2ae,124,cs,20-29,phone,491x1091,2,1,book_wrench_10,10,1,Kladivo|Šroubovák|Kleště|Klíč na matice,Klíč na matice,Kleště,0,1698,1000,1,text,gray,2026-11-25T10:16:11,2026-11-25T10:16:13
+2fabc2ae,124,cs,20-29,phone,491x1091,3,1,book_hammer_20,20,1,Kladivo|Šroubovák|Kleště|Klíč na matice,Kladivo,Kladivo,1,785,1000,1,text,gray,2026-11-25T10:16:12,2026-11-25T10:16:16
+2fabc2ae,124,cs,20-29,phone,491x1091,4,1,book_pliers_40_nokey,40,0,Kladivo|Šroubovák|Kleště|Klíč na matice,Kleště,Kleště,1,707,1000,1,text,gray,2026-11-25T10:16:14,2026-11-25T10:16:16
+2fabc2ae,124,cs,20-29,phone,491x1091,5,2,book_marker_10,10,1,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,932,1000,1,image,gray,2026-11-25T10:16:27,2026-11-25T10:16:27
+2fabc2ae,124,cs,20-29,phone,491x1091,6,2,book_pencil_s03,,,Fix|Tužka|Pravítko|Pero,Tužka,Tužka,1,1421,1000,2,image,gray,2026-11-25T10:16:29,2026-11-25T10:16:30
+2fabc2ae,124,cs,20-29,phone,491x1091,7,2,book_marker_25_nokey,25,0,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,747,1000,1,image,gray,2026-11-25T10:16:31,2026-11-25T10:16:33
+2fabc2ae,124,cs,20-29,phone,491x1091,8,2,book_marker_s04,,,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,656,1000,1,image,gray,2026-11-25T10:16:32,2026-11-25T10:16:35
+2fabc2ae,124,cs,20-29,phone,491x1091,9,2,book_marker_s09,,,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,697,1000,1,image,gray,2026-11-25T10:16:34,2026-11-25T10:16:35
+2fabc2ae,124,cs,20-29,phone,491x1091,10,2,book_pen_s07,,,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,557,1000,2,image,gray,2026-11-25T10:16:36,2026-11-25T10:16:38
+2fabc2ae,124,cs,20-29,phone,491x1091,11,2,book_pen_s01,,,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,558,1000,2,image,gray,2026-11-25T10:16:37,2026-11-25T10:16:40
+2fabc2ae,124,cs,20-29,phone,491x1091,12,2,book_pencil_s05,,,Fix|Tužka|Pravítko|Pero,Tužka,Tužka,1,838,1000,2,image,gray,2026-11-25T10:16:39,2026-11-25T10:16:43
+2fabc2ae,124,cs,20-29,phone,491x1091,13,2,book_ruler_s09,,,Fix|Tužka|Pravítko|Pero,Pravítko,Pravítko,1,545,1000,2,image,gray,2026-11-25T10:16:41,2026-11-25T10:16:43
+2fabc2ae,124,cs,20-29,phone,491x1091,14,2,book_ruler_s10,,,Fix|Tužka|Pravítko|Pero,Pravítko,Pravítko,1,523,1000,2,image,gray,2026-11-25T10:16:42,2026-11-25T10:16:45
+2fabc2ae,124,cs,20-29,phone,491x1091,15,2,book_pencil_s02,,,Fix|Tužka|Pravítko|Pero,Tužka,Tužka,1,718,1000,2,image,gray,2026-11-25T10:16:44,2026-11-25T10:16:45
+2fabc2ae,124,cs,20-29,phone,491x1091,16,2,book_pen_s09,,,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,568,1000,2,image,gray,2026-11-25T10:16:45,2026-11-25T10:16:48
+2fabc2ae,124,cs,20-29,phone,491x1091,17,2,book_ruler_s01,,,Fix|Tužka|Pravítko|Pero,Pravítko,Pravítko,1,531,1000,2,image,gray,2026-11-25T10:16:47,2026-11-25T10:16:48
+2fabc2ae,124,cs,20-29,phone,491x1091,18,2,book_pen_10,10,1,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,697,1000,1,image,gray,2026-11-25T10:16:49,2026-11-25T10:16:51
+2fabc2ae,124,cs,20-29,phone,491x1091,19,2,book_marker_s01,,,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,617,1000,2,image,gray,2026-11-25T10:16:50,2026-11-25T10:16:51
+2fabc2ae,124,cs,20-29,phone,491x1091,20,2,book_marker_s02,,,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,589,1000,1,image,gray,2026-11-25T10:16:52,2026-11-25T10:16:54
+2fabc2ae,124,cs,20-29,phone,491x1091,21,2,book_pen_s04,,,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,485,1000,1,image,gray,2026-11-25T10:16:53,2026-11-25T10:16:54
+2fabc2ae,124,cs,20-29,phone,491x1091,22,2,book_ruler_s08,,,Fix|Tužka|Pravítko|Pero,Pravítko,Pravítko,1,453,1000,2,image,gray,2026-11-25T10:16:55,2026-11-25T10:16:57
+2fabc2ae,124,cs,20-29,phone,491x1091,23,2,book_marker_s03,,,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,556,1000,1,image,gray,2026-11-25T10:16:56,2026-11-25T10:17:00
+2fabc2ae,124,cs,20-29,phone,491x1091,24,2,book_pencil_s07,,,Fix|Tužka|Pravítko|Pero,Tužka,Tužka,1,469,1000,2,image,gray,2026-11-25T10:16:58,2026-11-25T10:17:00
+2fabc2ae,124,cs,20-29,phone,491x1091,25,2,book_ruler_s04,,,Fix|Tužka|Pravítko|Pero,Pravítko,Pravítko,1,501,1000,1,image,gray,2026-11-25T10:16:59,2026-11-25T10:17:02
+2fabc2ae,124,cs,20-29,phone,491x1091,26,2,book_pencil_25,25,2,Fix|Tužka|Pravítko|Pero,Tužka,Tužka,1,380,1000,2,image,gray,2026-11-25T10:17:01,2026-11-25T10:17:02
+2fabc2ae,124,cs,20-29,phone,491x1091,27,2,book_ruler_s07,,,Fix|Tužka|Pravítko|Pero,Pravítko,Pravítko,1,451,1000,2,image,gray,2026-11-25T10:17:02,2026-11-25T10:17:05
+2fabc2ae,124,cs,20-29,phone,491x1091,28,2,book_ruler_s05,,,Fix|Tužka|Pravítko|Pero,Pravítko,Pravítko,1,475,1000,1,image,gray,2026-11-25T10:17:04,2026-11-25T10:17:05
+2fabc2ae,124,cs,20-29,phone,491x1091,29,2,book_pencil_s04,,,Fix|Tužka|Pravítko|Pero,Tužka,Tužka,1,472,1000,1,image,gray,2026-11-25T10:17:05,2026-11-25T10:17:09
+2fabc2ae,124,cs,20-29,phone,491x1091,30,2,book_pen_25,25,1,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,497,1000,2,image,gray,2026-11-25T10:17:07,2026-11-25T10:17:09
+2fabc2ae,124,cs,20-29,phone,491x1091,31,2,book_pen_s06,,,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,478,1000,1,image,gray,2026-11-25T10:17:08,2026-11-25T10:17:09
+2fabc2ae,124,cs,20-29,phone,491x1091,32,2,book_pencil_s01,,,Fix|Tužka|Pravítko|Pero,Tužka,Tužka,1,438,1000,2,image,gray,2026-11-25T10:17:10,2026-11-25T10:17:13
+2fabc2ae,124,cs,20-29,phone,491x1091,33,2,book_pen_s03,,,Fix|Tužka|Pravítko|Pero,Pero,Pero,1,550,1000,1,image,gray,2026-11-25T10:17:11,2026-11-25T10:17:13
+2fabc2ae,124,cs,20-29,phone,491x1091,34,2,book_marker_s06,,,Fix|Tužka|Pravítko|Pero,Fix,Fix,1,481,1000,2,image,gray,2026-11-25T10:17:13,2026-11-25T10:17:17
+2fabc2ae,124,cs,20-29,phone,491x1091,35,3,book_rake_5,5,1,Koště|Kbelík|Lopata|Hrábě,Hrábě,Hrábě,1,1164,1000,1,image,gray,2026-11-25T10:17:23,2026-11-25T10:17:31
+2fabc2ae,124,cs,20-29,phone,491x1091,36,3,book_bucket_20,20,1,Koště|Kbelík|Lopata|Hrábě,Kbelík,Kbelík,1,451,1000,2,image,gray,2026-11-25T10:17:24,2026-11-25T10:17:31
+2fabc2ae,124,cs,20-29,phone,491x1091,37,3,book_broom_15,15,1,Koště|Kbelík|Lopata|Hrábě,Koště,Koště,1,564,1000,1,image,gray,2026-11-25T10:17:26,2026-11-25T10:17:31
+2fabc2ae,124,cs,20-29,phone,491x1091,38,3,book_shovel_40_nokey,40,0,Koště|Kbelík|Lopata|Hrábě,Lopata,Lopata,1,621,1000,1,image,gray,2026-11-25T10:17:28,2026-11-25T10:17:34
+2fabc2ae,124,cs,20-29,phone,491x1091,39,4,book_whisk_5,5,1,Lžička|Kleštičky|Metla|Stěrka,Metla,Kleštičky,0,7660,1000,2,text,gray,2026-11-25T10:17:44,2026-11-25T10:17:45
+2fabc2ae,124,cs,20-29,phone,491x1091,40,4,book_tongs_50,50,1,Lžička|Kleštičky|Metla|Stěrka,Kleštičky,Kleštičky,1,1015,1000,2,text,gray,2026-11-25T10:17:46,2026-11-25T10:17:49
+2fabc2ae,124,cs,20-29,phone,491x1091,41,4,book_spatula_90_nokey,90,0,Lžička|Kleštičky|Metla|Stěrka,Stěrka,Stěrka,1,3548,1000,2,text,gray,2026-11-25T10:17:51,2026-11-25T10:17:52
+2fabc2ae,124,cs,20-29,phone,491x1091,42,4,book_spoon_50_nokey,50,0,Lžička|Kleštičky|Metla|Stěrka,Lžička,Kleštičky,0,1224,1000,1,text,gray,2026-11-25T10:17:53,2026-11-25T10:17:55
